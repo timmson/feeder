@@ -2,7 +2,7 @@ name: Docker
 
 on:
   workflow_run:
-    workflows: [ "Gradle" ]
+    workflows: [ "Gradle Package" ]
     branches: [ main ]
     types:
       - completed
