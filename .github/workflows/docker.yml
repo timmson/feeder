@@ -25,8 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Generate config
-        run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
+      # - name: Generate config
+      #  run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
 
       - name: Build image
         run: docker-compose build
