@@ -21,6 +21,11 @@ jobs:
       # - name: Generate config
       #  run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: feeder
+          path: feeder-web/build/lib/feed-web-1.0.jar
+
       - name: Build image
         run: docker-compose build
 

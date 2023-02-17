@@ -25,3 +25,8 @@ jobs:
 
       - name: Build Jar with Gradle
         run: ./gradlew feed-web:bootJar
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: feeder
+          path: feeder-web/build/lib/feed-web-1.0.jar
