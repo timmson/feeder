@@ -29,4 +29,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: feeder
-          path: feeder-web/build/lib/feed-web-1.0.jar
+          path: feeder-web/build/libs/feeder-web-1.0.jar

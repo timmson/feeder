@@ -24,7 +24,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: feeder
-          path: feeder-web/build/lib/feed-web-1.0.jar
+          path: feeder-web/build/libs/feeder-web-1.0.jar
 
       - name: Build image
         run: docker-compose build
