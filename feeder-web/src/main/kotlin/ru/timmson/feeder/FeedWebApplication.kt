@@ -1,4 +1,4 @@
-package ru.timmson.feeder.web
+package ru.timmson.feeder
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
