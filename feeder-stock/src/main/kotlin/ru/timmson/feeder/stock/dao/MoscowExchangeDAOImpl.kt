@@ -1,44 +1,54 @@
 package ru.timmson.feeder.stock.dao
 
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.stock.model.MEStock
 import ru.timmson.feeder.stock.model.Stock
+import ru.timmson.feeder.stock.model.StockConfig
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.logging.Logger
 
 @Service
-class MoscowExchangeDAOImpl(private val requester: Requester) : MoscowExchangeDAO {
+class MoscowExchangeDAOImpl(
+    private val requester: Requester,
+    private val objectMapper: ObjectMapper
+) : MoscowExchangeDAO {
 
-    private val log = Logger.getLogger(MarketWatchDAOImpl::class.java.toString())
-
-    private val tickers = mapOf(
-        //"usd" to "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=CETS:USD000UTSTOM"
-        "usd" to "https://iss.moex.com/iss/engines/currency/markets/selt/securities/USD000UTSTOM.json"
+    private val stockConfigs = mapOf(
+        "usd" to StockConfig(
+            "usd",
+            "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=CETS:USD000UTSTOM",
+            //"usd" to "https://iss.moex.com/iss/engines/currency/markets/selt/securities/USD000UTSTOM.json",
+            "LAST"
+        ),
+        "imoex" to StockConfig(
+            "imoex",
+            "https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX.json",
+            "LASTVALUE"
+        ),
+        "mredc" to StockConfig(
+            "mredc",
+            "https://iss.moex.com/iss/engines/stock/markets/index/securities/MREDC.json",
+            "LASTVALUE",
+            0
+        )
     )
 
     override fun getStockByTicker(ticker: String): Stock {
         try {
-            val url = tickers["usd"] ?: ""
+            val stockConfig = stockConfigs[ticker] ?: throw Exception("Ticker \"$ticker\" is not known")
 
-            log.info("Requesting $url ...")
-            val response = requester.url(url)
-            log.info("... done [length=${response.length}]")
+            val response = requester.fetch(stockConfig.url)
+            val meStock = objectMapper.readValue(response, MEStock::class.java)
 
-            val meStock = getObjectMapper().readValue(response, MEStock::class.java)
+            val index = meStock.marketdata.columns.indexOf(stockConfig.priceField)
+            val price = BigDecimal(meStock.marketdata.data[0][index])
+                .setScale(stockConfig.scale, RoundingMode.HALF_UP)
 
-            val index = meStock.securities.columns.indexOf("PREVPRICE")
-            val price = BigDecimal(meStock.securities.data[0][index])
-
-            return Stock(ticker.lowercase(), price.setScale(2, RoundingMode.HALF_UP))
+            return Stock(ticker.lowercase(), price)
         } catch (e: Exception) {
             throw StockDAOException(e)
         }
     }
-
-    private fun getObjectMapper() =
-        ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 }

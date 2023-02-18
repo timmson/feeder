@@ -1,13 +1,17 @@
 package ru.timmson.feeder.stock.dao
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import ru.timmson.feeder.stock.model.MEMarketData
+import ru.timmson.feeder.stock.model.MEStock
 import ru.timmson.feeder.stock.model.Stock
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -20,31 +24,40 @@ class MoscowExchangeDAOImplShould {
     @Mock
     private lateinit var requester: Requester
 
+    @Mock
+    private lateinit var objectMapper: ObjectMapper
+
+    private val response: String = "resp"
+
     @BeforeEach
     fun setUp() {
-        moscowExchangeDAO = MoscowExchangeDAOImpl(requester)
+        moscowExchangeDAO = MoscowExchangeDAOImpl(requester, objectMapper)
     }
 
 
     @Test
     fun returnUSDPrice() {
-        val expected = Stock("usd", BigDecimal(74.86).setScale(2, RoundingMode.HALF_UP))
-        val response = this.javaClass.classLoader.getResource("usd.json")?.readText()
+        val expected = Stock("usd", BigDecimal(74.29).setScale(2, RoundingMode.HALF_UP))
+        val meStock = getMeStock("LAST", "74.29")
 
-        val url = "https://iss.moex.com/iss/engines/currency/markets/selt/securities/USD000UTSTOM.json"
-        `when`(requester.url(url)).thenReturn(response)
+        val url = "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=CETS:USD000UTSTOM"
+        `when`(requester.fetch(url)).thenReturn(response)
+        `when`(objectMapper.readValue(eq(response), eq(MEStock::class.java))).thenReturn(meStock)
+
         val actual = moscowExchangeDAO.getStockByTicker("usd")
 
         assertEquals(expected, actual)
     }
 
-    /*@Test
+    @Test
     fun returnMoscowIndexPrice() {
-        val expected = Stock("imoex", BigDecimal(74.86).setScale(2, RoundingMode.HALF_UP))
-        val response = this.javaClass.classLoader.getResource("imoex.json")?.readText()
+        val expected = Stock("imoex", BigDecimal(2153.96).setScale(2, RoundingMode.HALF_UP))
+        val meStock = getMeStock("LASTVALUE", "2153.96")
 
         val url = "https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX.json"
-        `when`(requester.url(url)).thenReturn(response)
+        `when`(requester.fetch(url)).thenReturn(response)
+        `when`(objectMapper.readValue(eq(response), eq(MEStock::class.java))).thenReturn(meStock)
+
         val actual = moscowExchangeDAO.getStockByTicker("imoex")
 
         assertEquals(expected, actual)
@@ -52,21 +65,30 @@ class MoscowExchangeDAOImplShould {
 
     @Test
     fun returnMoscowRealtyIndexPrice() {
-        val expected = Stock("mredc", BigDecimal(74.86).setScale(2, RoundingMode.HALF_UP))
-        val response = this.javaClass.classLoader.getResource("mredc.json")?.readText()
+        val expected = Stock("mredc", BigDecimal(254856))
+        val meStock = getMeStock("LASTVALUE", "254855.55")
 
         val url = "https://iss.moex.com/iss/engines/stock/markets/index/securities/MREDC.json"
-        `when`(requester.url(url)).thenReturn(response)
-        val actual = moscowExchangeDAO.getStockByTicker("mrdec")
+        `when`(requester.fetch(url)).thenReturn(response)
+        `when`(objectMapper.readValue(eq(response), eq(MEStock::class.java))).thenReturn(meStock)
+
+        val actual = moscowExchangeDAO.getStockByTicker("mredc")
 
         assertEquals(expected, actual)
-    }*/
+    }
 
     @Test
     fun handleException() {
-        `when`(requester.url("https://www.marketwatch.com/investing/index/spx1")).thenReturn("")
-
         assertThrows<StockDAOException> { moscowExchangeDAO.getStockByTicker("spx1") }
     }
+
+
+    private fun getMeStock(fieldName: String, price: String): MEStock =
+        MEStock().apply {
+            marketdata = MEMarketData().apply {
+                columns = listOf(fieldName)
+                data = listOf(listOf(price))
+            }
+        }
 }
 

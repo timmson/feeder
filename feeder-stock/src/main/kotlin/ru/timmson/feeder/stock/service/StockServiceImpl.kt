@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service
 import ru.timmson.feeder.stock.dao.MarketWatchDAO
 import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
 import ru.timmson.feeder.stock.model.Stock
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.stream.Collectors
 
 /**
@@ -20,8 +18,8 @@ class StockServiceImpl(
 
     private val stocks = mapOf(
         "usd" to { moscowExchangeDAO.getStockByTicker("usd") },
-        "imoex" to { Stock("imoex", BigDecimal(2000.00).setScale(2, RoundingMode.HALF_UP)) },
-        "mrdec" to { Stock("mrdec", BigDecimal(250.76).setScale(2, RoundingMode.HALF_UP)) },
+        "imoex" to { moscowExchangeDAO.getStockByTicker("imoex") },
+        "mrdec" to { moscowExchangeDAO.getStockByTicker("mredc") },
         "spx" to { marketWatchDAO.getStockByTicker("spx") },
         "shcomp" to { marketWatchDAO.getStockByTicker("shcomp") },
     )
