@@ -1,5 +1,6 @@
 package ru.timmson.feeder.stock.dao
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.stock.model.MEStock
@@ -14,7 +15,8 @@ class MoscowExchangeDAOImpl(private val requester: Requester) : MoscowExchangeDA
     private val log = Logger.getLogger(MarketWatchDAOImpl::class.java.toString())
 
     private val tickers = mapOf(
-        "usd" to "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=USD000UTSTOM"
+        //"usd" to "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=CETS:USD000UTSTOM"
+        "usd" to "https://iss.moex.com/iss/engines/currency/markets/selt/securities/USD000UTSTOM.json"
     )
 
     override fun getStockByTicker(ticker: String): Stock {
@@ -25,7 +27,8 @@ class MoscowExchangeDAOImpl(private val requester: Requester) : MoscowExchangeDA
             val response = requester.url(url)
             log.info("... done [length=${response.length}]")
 
-            val meStock = ObjectMapper().readValue(response, MEStock::class.java)
+            val meStock = getObjectMapper().readValue(response, MEStock::class.java)
+
             val index = meStock.securities.columns.indexOf("PREVPRICE")
             val price = BigDecimal(meStock.securities.data[0][index])
 
@@ -34,5 +37,8 @@ class MoscowExchangeDAOImpl(private val requester: Requester) : MoscowExchangeDA
             throw StockDAOException(e)
         }
     }
+
+    private fun getObjectMapper() =
+        ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 }
