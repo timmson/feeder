@@ -1,0 +1,48 @@
+{
+  "securities": {
+    "columns": [
+      "SECID",
+      "BOARDID",
+      "SHORTNAME",
+      "LOTSIZE",
+      "SETTLEDATE",
+      "DECIMALS",
+      "FACEVALUE",
+      "MARKETCODE",
+      "MINSTEP",
+      "PREVDATE",
+      "SECNAME",
+      "REMARKS",
+      "STATUS",
+      "FACEUNIT",
+      "PREVPRICE",
+      "PREVWAPRICE",
+      "CURRENCYID",
+      "LATNAME",
+      "LOTDIVIDER"
+    ],
+    "data": [
+      [
+        "USD000UTSTOM",
+        "CETS",
+        "USDRUB_TOM",
+        1000,
+        "2023-02-21",
+        4,
+        1,
+        "CURR",
+        0.0025,
+        "2023-02-16",
+        "USDRUB_TOM - USD\/РУБ",
+        null,
+        "A",
+        "USD",
+        74.855,
+        74.7713,
+        "RUB",
+        "USDRUB_TOM - USD\/RUB",
+        1
+      ]
+    ]
+  }
+}

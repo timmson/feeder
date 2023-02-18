@@ -3,8 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":feeder-moex"))
+    implementation(project(":feeder-stock"))
 
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.0.2")
-    implementation(project(mapOf("path" to ":feeder-moex")))
 }

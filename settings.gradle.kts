@@ -1,4 +1,4 @@
 rootProject.name = "feeder"
 
-include("feeder-moex")
+include("feeder-stock")
 include("feeder-web")
