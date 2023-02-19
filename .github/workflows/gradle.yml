@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IS_MAIN: ${{ GITHUB_REF == "refs/heads/main" }}
+      IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
 
     steps:
       - uses: actions/checkout@v3
