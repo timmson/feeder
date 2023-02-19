@@ -44,7 +44,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Push image
-        if: github.ref == 'refs/head/${{ env.RELEASE_BRANCH }}'
+        if: github.ref == 'refs/head/main'
         run: |
           SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
           echo SERVICE_NAME=$SERVICE_NAME
