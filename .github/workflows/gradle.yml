@@ -7,14 +7,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    env:
-      RELEASE_BRANCH: "main"
-
     steps:
       - uses: actions/checkout@v3
-
-      - name: Check branch
-        run: echo ${{ env.IS_MAIN }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -36,11 +30,10 @@ jobs:
       #  run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
 
       - name: Build image
-        if: ${{ env.IS_MAIN }}
         run: docker-compose build
 
       - name: Log into registry
-        if: false
+        if: github.ref == 'refs/head/main'
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Push image
