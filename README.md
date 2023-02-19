@@ -16,3 +16,4 @@ sudo apt install openjdk-17-jdk
 
 - Add async call and exception handling
 - Collect dependencies versions in one place
+- Add TG bot api

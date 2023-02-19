@@ -19,7 +19,7 @@ class RequesterImpl : Requester {
         val request = builder.GET().build()
         val body = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString()).body()
 
-        log.info("Leaving fetch (...${url.substring(url.length - 10)}) = [length=${body.length}] ")
+        log.info("Leaving fetch (.../${url.split("/").last()}) = [length=${body.length}] ")
         return body
     }
 }
