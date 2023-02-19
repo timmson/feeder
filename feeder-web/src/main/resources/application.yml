@@ -1,3 +1,7 @@
+feeder:
+  schedule:
+    stock: "0 5 10,17 * * *"
+
 spring:
   output:
     ansi:

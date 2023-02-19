@@ -6,10 +6,6 @@ import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
 import ru.timmson.feeder.stock.model.Stock
 import java.util.stream.Collectors
 
-/**
- * TODO Add async call and exception handling
- */
-
 @Service
 class StockServiceImpl(
     private val moscowExchangeDAO: MoscowExchangeDAO,
