@@ -40,11 +40,11 @@ jobs:
         run: docker-compose build
 
       - name: Log into registry
-        if: ${{ env.IS_MAIN }}
+        if: false
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Push image
-        if: ${{ env.IS_MAIN }}
+        if: "${{ env.IS_MAIN }}"
         run: |
           SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
           echo SERVICE_NAME=$SERVICE_NAME
