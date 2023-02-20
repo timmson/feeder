@@ -1,18 +1,6 @@
-FROM timmson/mbt-platform-v2:java
+FROM --platform=linux/amd64 eclipse-temurin:17-jdk-alpine
 LABEL maintaner="Krotov Artem <timmson666@mail.ru>"
 
-ARG username
+COPY feeder-web/build/libs/feeder-web.jar app.jar
 
-RUN useradd ${username} -s /bin/bash -G sudo -md /home/${username} && \
-    sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers && \
-    mkdir /app
-
-WORKDIR /app
-
-COPY feeder-web/build/libs/feeder-web.jar ./
-
-RUN chown -R ${username}:${username} .
-
-USER ${username}
-
-CMD ["java", "-jar", "feeder-web.jar"]
+CMD ["java", "-jar", "app.jar"]
