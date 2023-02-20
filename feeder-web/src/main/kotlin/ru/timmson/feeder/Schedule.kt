@@ -9,7 +9,7 @@ import java.util.logging.Logger
 
 @Service
 class Schedule(
-    @Value("\${feeder.schedule.stock}") val scheduleStock: String,
+    @Value("\${feeder.stock.schedule}") private val scheduleStock: String,
     private val stockService: StockService
 ) {
 
@@ -20,7 +20,7 @@ class Schedule(
         log.info("Schedule is $scheduleStock")
     }
 
-    @Scheduled(cron = "\${feeder.schedule.stock}")
+    @Scheduled(cron = "\${feeder.stock.schedule}")
     fun fetchStocks() {
         log.info("Entering fetchStocks() ...")
         stockService.findAll().forEach { log.info(it.toString()) }
