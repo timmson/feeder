@@ -9,7 +9,7 @@ RUN useradd ${username} -s /bin/bash -G sudo -md /home/${username} && \
 
 WORKDIR /app
 
-COPY feeder-web/build/libs/feeder-web-1.0.jar ./feeder-web.jar
+COPY feeder-web/build/libs/feeder-web.jar ./
 
 RUN chown -R ${username}:${username} .
 
