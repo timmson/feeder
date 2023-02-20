@@ -8,16 +8,15 @@ import java.net.http.HttpResponse
 import java.util.logging.Logger
 
 @Service
-class RequesterImpl : Requester {
+class RequesterImpl(private val httpClient: HttpClient) : Requester {
 
     private val log = Logger.getLogger(RequesterImpl::class.java.toString())
 
     override fun fetch(url: String): String {
         log.info("Entering fetch ($url) ... ")
 
-        val builder = HttpRequest.newBuilder(URI(url))
-        val request = builder.GET().build()
-        val body = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString()).body()
+        val request = HttpRequest.newBuilder(URI(url)).GET().build()
+        val body = httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body()
 
         log.info("Leaving fetch (.../${url.split("/").last()}) = [length=${body.length}] ")
         return body

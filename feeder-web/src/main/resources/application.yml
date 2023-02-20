@@ -1,6 +1,7 @@
 feeder:
-  schedule:
-    stock: "0 5 10,17 * * *"
+  stock:
+    timeout: 5000
+    schedule: "0 5 10,17 * * *"
 
 spring:
   output:
