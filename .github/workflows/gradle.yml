@@ -36,7 +36,7 @@ jobs:
         run: echo github.ref
 
       - name: Echo
-        run: echo ${{ github.ref }]
+        run: echo ${{ github.ref }}
 
       - name: Log into registry
         if: github.ref == 'refs/head/main'
