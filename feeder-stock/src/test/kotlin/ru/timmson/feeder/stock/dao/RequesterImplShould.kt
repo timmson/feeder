@@ -2,13 +2,13 @@ package ru.timmson.feeder.stock.dao
 
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import ru.timmson.feeder.stock.FeederStockBeanConfig
-import java.net.http.HttpConnectTimeoutException
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 class RequesterImplShould {
 
@@ -20,7 +20,7 @@ class RequesterImplShould {
 
     @BeforeEach
     fun setUp() {
-        requesterImpl = RequesterImpl(FeederStockBeanConfig().getHttpClient(1))
+        requesterImpl = RequesterImpl(500)
         webServer = MockWebServer()
         url = webServer.url("/").toString()
     }
@@ -28,7 +28,7 @@ class RequesterImplShould {
     @Test
     fun fetchSuccessfulResponse() {
         val expected = "x"
-        webServer.enqueue(MockResponse().setBody(expected).setBodyDelay(0, TimeUnit.NANOSECONDS))
+        webServer.enqueue(MockResponse().setBody(expected))
 
         val actual = requesterImpl.fetch(url)
 
@@ -37,9 +37,13 @@ class RequesterImplShould {
 
     @Test
     fun handleTimeout() {
-        webServer.enqueue(MockResponse().setBodyDelay(2, TimeUnit.MILLISECONDS))
-        val url = webServer.url("/").toString()
+        webServer.enqueue(MockResponse().setBodyDelay(600, TimeUnit.MILLISECONDS).setBody("-"))
 
-        assertThrows<HttpConnectTimeoutException> { requesterImpl.fetch(url) }
+        assertThrows<TimeoutException> { requesterImpl.fetch(url) }
+    }
+
+    @AfterEach
+    fun tearDown() {
+        webServer.shutdown()
     }
 }
