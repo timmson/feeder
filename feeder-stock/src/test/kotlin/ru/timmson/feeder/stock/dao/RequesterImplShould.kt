@@ -16,19 +16,22 @@ class RequesterImplShould {
 
     private lateinit var webServer: MockWebServer
 
+    private lateinit var url: String
+
     @BeforeEach
     fun setUp() {
         requesterImpl = RequesterImpl(FeederStockBeanConfig().getHttpClient(1))
         webServer = MockWebServer()
+        url = webServer.url("/").toString()
     }
 
     @Test
     fun fetchSuccessfulResponse() {
-        val expected = ""
-        webServer.enqueue(MockResponse().setBody(expected))
-        val url = webServer.url("/").toString()
+        val expected = "x"
+        webServer.enqueue(MockResponse().setBody(expected).setBodyDelay(0, TimeUnit.NANOSECONDS))
 
         val actual = requesterImpl.fetch(url)
+
         assertEquals(expected, actual)
     }
 
