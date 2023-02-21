@@ -33,6 +33,7 @@ jobs:
         run: docker-compose build
 
       - name: Push image
+        if: github.ref == 'refs/heads/main'
         run: |
           # Check if it is release branch
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then 
