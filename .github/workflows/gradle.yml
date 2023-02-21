@@ -32,12 +32,12 @@ jobs:
       - name: Build image
         run: docker-compose build
 
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-
       - name: Push image
-        if: '${{ github.ref }}' == 'refs/head/main'
         run: |
+          [[ "${{ github.ref }}" != "refs/tags/main" ]] exit 0
+          
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          
           SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
           echo SERVICE_NAME=$SERVICE_NAME
 
