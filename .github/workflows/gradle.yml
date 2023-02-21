@@ -35,7 +35,7 @@ jobs:
       - name: Push image
         run: |
           # Check if it is release branch
-          if [ "${{ github.ref }}" != "refs/head/main" ]; then 
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then 
             echo "Skipping push phase"
             exit 0
           fi
