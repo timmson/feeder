@@ -6,15 +6,16 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import org.springframework.beans.factory.annotation.Value
 import ru.timmson.feeder.common.logger
+import java.time.LocalDateTime
 
 
 //@Service
-class Main(
+class BotServiceImpl(
     @Value("\${feeder.tg.token}") private val token: String,
     @Value("\${feeder.tg.owner.id}") private val ownerId: String
-) {
+) : BotService {
 
-    private val log = logger<Main>()
+    private val log = logger<BotServiceImpl>()
 
     private lateinit var bot: TelegramBot
 
@@ -22,12 +23,14 @@ class Main(
     fun postConstruct() {
         bot = TelegramBot(token)
 
-        log.info("Sending hello message ...")
+        sendMessage("Started at ${LocalDateTime.now()}")
+    }
 
-        val helloMessage = SendMessage(ownerId, "Hello!")
+    override fun sendMessage(messageText: String) {
+        log.info("Entering sendMessage(\"$messageText\") ...")
+        val helloMessage = SendMessage(ownerId, messageText)
         val response = bot.execute(helloMessage)
-
-        log.info("Response: $response")
+        log.info("Leaving sendMessage(...) = $response")
     }
 
     @PreDestroy
