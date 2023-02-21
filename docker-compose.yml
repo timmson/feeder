@@ -8,3 +8,5 @@ services:
     ports:
       - "9090:9090"
     restart: always
+    volumes:
+      - ./config:/config

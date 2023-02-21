@@ -6,4 +6,5 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /e
 
 COPY feeder-web/build/libs/feeder-web.jar app.jar
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar","--spring.config.location=/config/application.yml"]
+#CMD ["java", "-jar", "app.jar"]

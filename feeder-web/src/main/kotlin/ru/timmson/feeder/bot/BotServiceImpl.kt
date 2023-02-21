@@ -5,11 +5,12 @@ import com.pengrad.telegrambot.request.SendMessage
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 import ru.timmson.feeder.common.logger
 import java.time.LocalDateTime
 
 
-//@Service
+@Service
 class BotServiceImpl(
     @Value("\${feeder.tg.token}") private val token: String,
     @Value("\${feeder.tg.owner.id}") private val ownerId: String
