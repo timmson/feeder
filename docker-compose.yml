@@ -2,11 +2,9 @@ version: '2'
 services:
   mbt-feed-svc:
     image: feeder
-    container_name: feeder
+    container_name: feeder-svc
     build:
       context: .
-      args:
-        - username=user
     ports:
       - "9090:9090"
     restart: always

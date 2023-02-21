@@ -34,7 +34,7 @@ jobs:
 
       - name: Push image
         run: |
-          [[ "${{ github.ref }}" != "refs/tags/main" ]] exit 0
+          if [ "${{ github.ref }}" != "refs/tags/main" ] then exit 0
           
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
           
