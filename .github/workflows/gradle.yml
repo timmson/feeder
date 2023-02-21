@@ -35,10 +35,10 @@ jobs:
       - name: Push image
         run: |
           # Check if it is release branch
-          if [ "${{ github.ref }}" != "refs/tags/main" ]; then 
+          if [ "${{ github.ref }}" == "refs/tags/main" ]; then 
             echo "Skipping push phase"
             exit 0
-          if
+          fi
           
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
           
