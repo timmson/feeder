@@ -1,5 +1,5 @@
 feeder:
-  version: "6"
+  version: "7"
   stock:
     timeout: 10000
     schedule: "0 5 10,17 * * *"
