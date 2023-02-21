@@ -1,10 +1,16 @@
 apply(plugin = "org.springframework.boot")
 
 val springBootVersion: String by rootProject.extra
+val tgBotAPIVersion: String by rootProject.extra
 
 dependencies {
+    implementation(project(":feeder-common"))
     implementation(project(":feeder-stock"))
+
     implementation("org.springframework.boot:spring-boot-starter-webflux:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:$springBootVersion")
+    implementation("com.github.pengrad:java-telegram-bot-api:$tgBotAPIVersion")
+
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

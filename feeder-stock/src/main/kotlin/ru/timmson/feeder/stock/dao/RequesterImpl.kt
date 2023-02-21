@@ -2,19 +2,19 @@ package ru.timmson.feeder.stock.dao
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import ru.timmson.feeder.common.logger
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.util.concurrent.TimeUnit
-import java.util.logging.Logger
 
 @Service
 class RequesterImpl(
     @Value("\${feeder.stock.timeout}") private val timeoutInMillis: Long
 ) : Requester {
 
-    private val log = Logger.getLogger(RequesterImpl::class.java.toString())
+    private val log = logger<RequesterImpl>()
 
     override fun fetch(url: String): String {
         log.info("Entering fetch ($url) ... ")
