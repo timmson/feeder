@@ -13,6 +13,8 @@ val kotlinVersion by extra { "1.8.10" }
 val kotlinCoroutinesVersion by extra { "1.6.4" }
 val jaksonVersion by extra { "2.14.1" }
 val jsoupVersion by extra { "1.15.3" }
+val tgBotAPIVersion by extra { "6.3.0" }
+
 val mockWebserverVersion by extra { "4.10.0" }
 val junitVersion by extra { "5.9.2" }
 val mockitoVersion by extra { "5.1.1" }

@@ -1,5 +1,10 @@
 feeder:
-  version: "7"
+  version: "8"
+  tg:
+    token: "<token>"
+    owner:
+      id: "<id>"
+      name: "<name>"
   stock:
     timeout: 10000
     schedule: "0 5 10,17 * * *"

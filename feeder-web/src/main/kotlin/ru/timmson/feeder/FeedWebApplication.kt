@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.scheduling.annotation.EnableScheduling
-import java.util.logging.Logger
+import ru.timmson.feeder.common.logger
 
 @EnableScheduling
 @SpringBootApplication
@@ -13,7 +13,7 @@ open class FeedWebApplication(
     @Value("\${feeder.version}") private val version: String
 ) {
 
-    private val log = Logger.getLogger(FeedWebApplication::class.java.toString())
+    private val log = logger<FeedWebApplication>()
 
     @PostConstruct
     fun printInfo() {

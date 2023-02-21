@@ -4,8 +4,8 @@ import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.stock.service.StockService
-import java.util.logging.Logger
 
 @Service
 class Schedule(
@@ -13,7 +13,7 @@ class Schedule(
     private val stockService: StockService
 ) {
 
-    private val log = Logger.getLogger(Schedule::class.java.toString())
+    private val log = logger<Schedule>()
 
     @PostConstruct
     fun init() {

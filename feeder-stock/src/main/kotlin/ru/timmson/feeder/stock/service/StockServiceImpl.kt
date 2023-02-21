@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
+import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.stock.dao.MarketWatchDAO
 import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
 import ru.timmson.feeder.stock.dao.StockDAO
 import ru.timmson.feeder.stock.model.Stock
-import java.util.logging.Logger
 
 @Service
 class StockServiceImpl(
@@ -17,7 +17,7 @@ class StockServiceImpl(
     marketWatchDAO: MarketWatchDAO
 ) : StockService {
 
-    private val log = Logger.getLogger(StockServiceImpl::class.toString())
+    private val log = logger<StockServiceImpl>()
 
     private val stocks = mapOf(
         "usd" to moscowExchangeDAO,

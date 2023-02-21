@@ -14,4 +14,4 @@ sudo apt install openjdk-17-jdk
 
 ### TODO
 
-- Add TG bot api
+- [In progress] Add TG bot api
