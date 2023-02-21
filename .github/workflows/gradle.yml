@@ -30,7 +30,7 @@ jobs:
       #  run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
 
       - name: Upload artifact
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: feed-web.jar
           path: feeder-web/build/libs/feeder-web.jar
