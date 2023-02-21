@@ -1,10 +1,10 @@
-plugins {
-    id("org.springframework.boot") version "3.0.2"
-}
+apply(plugin = "org.springframework.boot")
+
+val springBootVersion: String by rootProject.extra
 
 dependencies {
     implementation(project(":feeder-stock"))
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.0.2")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:$springBootVersion")
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
