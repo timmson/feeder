@@ -35,6 +35,7 @@ subprojects {
 
     dependencies {
         implementation(kotlin("stdlib-jdk8"))
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
 
         implementation("org.springframework:spring-context:$springVersion")
 

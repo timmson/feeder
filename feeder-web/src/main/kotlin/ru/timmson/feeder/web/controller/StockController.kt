@@ -2,7 +2,7 @@ package ru.timmson.feeder.web.controller
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.timmson.feeder.Schedule
+import ru.timmson.feeder.schedule.Schedule
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
 
@@ -17,7 +17,7 @@ class StockController(
 
     @GetMapping("/stock/send")
     fun sendAllStocks(): String {
-        schedule.sendStocks()
+        schedule.sendStocksToOwner()
         return "OK"
     }
 
