@@ -13,7 +13,7 @@ class BotDispatcher(
     private val botService: BotService,
     private val schedule: Schedule,
     botListener: BotListener
-) : AbstractBotSubscriber(botListener), BotSubscriber {
+) : AbstractBotSubscriber(botListener) {
 
     override fun receiveUpdate(update: Update) {
         val chantId = update.message().chat().id()

@@ -6,7 +6,7 @@ import ru.timmson.feeder.bot.BotListener
 import ru.timmson.feeder.common.logger
 
 @Service
-class BotLogger(botListener: BotListener) : AbstractBotSubscriber(botListener), BotSubscriber {
+class BotLogger(botListener: BotListener) : AbstractBotSubscriber(botListener) {
 
     private val log = logger<BotLogger>()
 
