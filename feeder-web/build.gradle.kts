@@ -8,9 +8,9 @@ dependencies {
     implementation(project(":feeder-stock"))
 
     implementation("org.springframework.boot:spring-boot-starter-webflux:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:$springBootVersion")
     implementation("com.github.pengrad:java-telegram-bot-api:$tgBotAPIVersion")
 
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
