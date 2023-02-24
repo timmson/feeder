@@ -8,8 +8,6 @@ interface BotListener : UpdatesListener {
 
     override fun process(updates: MutableList<Update>?): Int
 
-    fun handle(updates: List<Update>)
-
     fun subscribe(subscriber: BotSubscriber)
 
     fun unsubscribe(subscriber: BotSubscriber)

@@ -13,18 +13,19 @@ class FeederFacadeImpl(
 
     private val log = logger<FeederFacadeImpl>()
 
+    private val stocks = mapOf(
+        "usd" to "💰",
+        "imoex" to "🇷🇺",
+        "mredc" to "🏡",
+        "spx" to "🇺🇸",
+        "shcomp" to "🇨🇳"
+    )
+
     override fun sendStocksToOwner() {
         log.info("Entering sendStocks() ...")
 
         val message = stockService.findAll().joinToString(", ") {
-            when (it.ticker) {
-                "usd" -> "💰"
-                "imoex" -> "🇷🇺"
-                "mredc" -> "🏡"
-                "spx" -> "🇺🇸"
-                "shcomp" -> "🇨🇳"
-                else -> ""
-            } + it.price
+            stocks.getOrDefault(it.ticker, "") + it.price
         }
 
         botService.sendMessageToOwner(message)

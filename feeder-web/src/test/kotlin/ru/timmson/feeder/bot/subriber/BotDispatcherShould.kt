@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
@@ -43,9 +41,6 @@ class BotDispatcherShould {
     @Spy
     private lateinit var chat: Chat
 
-    @Captor
-    private lateinit var textCaptor: ArgumentCaptor<String>
-
     @BeforeEach
     fun setUp() {
         botDispatcher = BotDispatcher(feederConfig, botService, feederFacade, botListener)
@@ -61,11 +56,9 @@ class BotDispatcherShould {
         val senderId = 2L
 
         doReturn(senderId).`when`(chat).id()
-        doNothing().`when`(botService).sendMessage(eq(senderId), capture(textCaptor))
         botDispatcher.receiveUpdate(update)
-        val actual = textCaptor.value
 
-        assertEquals(expected, actual)
+        verify(botService).sendMessage(eq(senderId), eq(expected))
         verifyNoInteractions(feederFacade)
     }
 

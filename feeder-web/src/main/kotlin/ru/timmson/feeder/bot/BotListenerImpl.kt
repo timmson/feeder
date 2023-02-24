@@ -20,17 +20,17 @@ class BotListenerImpl : BotListener {
         UpdatesListener.CONFIRMED_UPDATES_ALL
     }
 
-    override fun handle(updates: List<Update>) = runBlocking {
-        updates.forEach { u ->
-            launch {
-                subscribers.forEach { s ->
-                    launch {
-                        s.receiveUpdate(u)
-                    }
-                }
-            }
-        }
-    }
+     private fun handle(updates: List<Update>) = runBlocking {
+         updates.forEach { u ->
+             launch {
+                 subscribers.forEach { s ->
+                     launch {
+                         s.receiveUpdate(u)
+                     }
+                 }
+             }
+         }
+     }
 
     override fun subscribe(subscriber: BotSubscriber) {
         log.info("${subscriber.javaClass.simpleName} subscribed to BotUpdates")
