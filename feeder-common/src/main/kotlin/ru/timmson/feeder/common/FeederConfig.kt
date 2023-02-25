@@ -17,6 +17,4 @@ class FeederConfig {
     @Value("\${feeder.stock.timeout}")
     var timeoutInMillis: Long = 0
 
-    @Value("\${feeder.version}")
-    var version: String = ""
 }

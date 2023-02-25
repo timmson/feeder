@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.reactive.server.WebTestClient
-import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.service.FeederFacade
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
@@ -21,9 +20,6 @@ import java.math.BigDecimal
 @ExtendWith(MockitoExtension::class)
 @WebFluxTest(controllers = [StockController::class])
 class StockControllerShould {
-
-    @MockBean
-    private lateinit var feederConfig: FeederConfig
 
     @MockBean
     private lateinit var stockService: StockService
