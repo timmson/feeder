@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.spring") version "1.8.10"
     id("org.springframework.boot") version "3.0.2"
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 val springVersion by extra { "6.0.4" }
@@ -29,12 +30,14 @@ allprojects {
 subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "kotlin")
+    apply(plugin = "org.jetbrains.kotlinx.kover")
 
     group = "ru.timmson.feeder"
     version = "1.0"
 
     dependencies {
         implementation(kotlin("stdlib-jdk8"))
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
 
         implementation("org.springframework:spring-context:$springVersion")
 

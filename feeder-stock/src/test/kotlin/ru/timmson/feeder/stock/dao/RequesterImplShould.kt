@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import ru.timmson.feeder.common.FeederConfig
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
@@ -20,7 +21,8 @@ class RequesterImplShould {
 
     @BeforeEach
     fun setUp() {
-        requesterImpl = RequesterImpl(500)
+        val config = FeederConfig().apply { timeoutInMillis = 500 }
+        requesterImpl = RequesterImpl(config)
         webServer = MockWebServer()
         url = webServer.url("/").toString()
     }
