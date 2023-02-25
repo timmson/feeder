@@ -4,6 +4,7 @@ val springBootVersion: String by rootProject.extra
 val tgBotAPIVersion: String by rootProject.extra
 
 dependencies {
+    implementation(project(":feeder-calendar"))
     implementation(project(":feeder-common"))
     implementation(project(":feeder-stock"))
 
