@@ -1,31 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.spring") version "1.8.10"
-    id("org.springframework.boot") version "3.0.2"
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    id("io.spring.dependency-management") apply false
+    kotlin("jvm")
+    kotlin("plugin.spring") apply false
+    id("org.springframework.boot") apply false
+    id("org.jetbrains.kotlinx.kover") apply false
 }
 
-val springVersion by extra { "6.0.4" }
-val springBootVersion by extra { "3.0.2" }
-val kotlinVersion by extra { "1.8.10" }
-val kotlinCoroutinesVersion by extra { "1.6.4" }
-val jaksonVersion by extra { "2.14.1" }
-val jsoupVersion by extra { "1.15.3" }
-val tgBotAPIVersion by extra { "6.3.0" }
+val springVersion: String by project
+val springBootVersion: String by project
+val kotlinVersion: String by project
+val kotlinCoroutinesVersion: String by project
+val jaksonVersion: String by project
+val jsoupVersion: String by project
+val tgBotAPIVersion: String by project
 
-val mockWebserverVersion by extra { "4.10.0" }
-val junitVersion by extra { "5.9.2" }
-val mockitoVersion by extra { "5.1.1" }
-val mockitoKotlinVersion by extra { "4.1.0" }
-
-allprojects {
-    repositories {
-        mavenCentral()
-    }
-}
+val mockWebserverVersion: String by project
+val junitVersion: String by project
+val mockitoVersion: String by project
+val mockitoKotlinVersion: String by project
 
 subprojects {
     apply(plugin = "io.spring.dependency-management")
@@ -34,6 +28,10 @@ subprojects {
 
     group = "ru.timmson.feeder"
     version = "1.0"
+
+    repositories {
+        mavenCentral()
+    }
 
     dependencies {
         implementation(kotlin("stdlib-jdk8"))
