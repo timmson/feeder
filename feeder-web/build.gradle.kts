@@ -1,7 +1,7 @@
 apply(plugin = "org.springframework.boot")
 
-val springBootVersion: String by rootProject.extra
-val tgBotAPIVersion: String by rootProject.extra
+val springBootVersion: String by project
+val tgBotAPIVersion: String by project
 
 dependencies {
     implementation(project(":feeder-calendar"))

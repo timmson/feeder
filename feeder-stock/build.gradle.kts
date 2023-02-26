@@ -1,6 +1,6 @@
-val jaksonVersion: String by rootProject.extra
-val jsoupVersion: String by rootProject.extra
-val mockWebserverVersion: String by rootProject.extra
+val jaksonVersion: String by project
+val jsoupVersion: String by project
+val mockWebserverVersion: String by project
 
 dependencies {
     implementation(project(":feeder-common"))
