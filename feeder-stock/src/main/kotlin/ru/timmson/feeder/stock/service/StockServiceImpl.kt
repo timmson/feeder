@@ -27,18 +27,25 @@ class StockServiceImpl(
         "shcomp" to marketWatchDAO
     )
 
+    private val cache = mutableMapOf<String, Stock>()
+
     override fun findAll(): List<Stock> = runBlocking {
         stocks.entries.asFlow().transform { emit(getStock(it)) }.toList()
     }
 
+    override fun resetCache() {
+        cache.clear()
+    }
+
     fun getTickers() = stocks.keys
 
-    private fun getStock(it: Map.Entry<String, StockDAO>) =
+    private fun getStock(it: Map.Entry<String, StockDAO>): Stock {
         try {
-            it.value.getStockByTicker(it.key)
+            cache[it.key] = it.value.getStockByTicker(it.key)
         } catch (e: Exception) {
             log.severe("Stock ${it.key} is not received: $e")
-            Stock(it.key)
         }
+        return cache[it.key] ?: Stock(it.key)
+    }
 
 }

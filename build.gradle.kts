@@ -12,7 +12,7 @@ val springVersion: String by project
 val springBootVersion: String by project
 val kotlinVersion: String by project
 val kotlinCoroutinesVersion: String by project
-val jaksonVersion: String by project
+val jacksonVersion: String by project
 val jsoupVersion: String by project
 val tgBotAPIVersion: String by project
 
