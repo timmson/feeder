@@ -17,7 +17,7 @@ class StockController(
 
     @GetMapping("/stock/send")
     fun sendAllStocks(): String {
-        feederFacade.sendStocksToOwner()
+        feederFacade.sendStocksToChannel()
         return "OK"
     }
 

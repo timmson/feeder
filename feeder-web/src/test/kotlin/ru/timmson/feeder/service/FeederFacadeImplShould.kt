@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
 import ru.timmson.feeder.bot.BotService
+import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
 import java.math.BigDecimal
@@ -19,6 +20,8 @@ class FeederFacadeImplShould {
 
     private lateinit var feederFacade: FeederFacadeImpl
 
+    private lateinit var feederConfig: FeederConfig
+
     @Mock
     private lateinit var stockService: StockService
 
@@ -27,12 +30,13 @@ class FeederFacadeImplShould {
 
     @BeforeEach
     fun setUp() {
-        feederFacade = FeederFacadeImpl(stockService, botService)
+        feederConfig = FeederConfig()
+        feederFacade = FeederFacadeImpl(feederConfig, stockService, botService)
     }
 
     @Test
     fun sendStocksToOwner() {
-        val stocks = listOf<Stock>(
+        val stocks = listOf(
             Stock("usd", BigDecimal(10)),
             Stock("spx", BigDecimal(20))
         )
@@ -41,5 +45,19 @@ class FeederFacadeImplShould {
         feederFacade.sendStocksToOwner()
 
         verify(botService).sendMessageToOwner(eq("💰10, 🇺🇸20"))
+    }
+
+    @Test
+    fun sendStocksToChannel() {
+        feederConfig.stockChannelId = "channelId"
+        val stocks = listOf(
+            Stock("usd", BigDecimal(10)),
+            Stock("spx", BigDecimal(20))
+        )
+        `when`(stockService.findAll()).thenReturn(stocks)
+
+        feederFacade.sendStocksToChannel()
+
+        verify(botService).sendMessage(eq(feederConfig.stockChannelId), eq("💰10, 🇺🇸20"))
     }
 }

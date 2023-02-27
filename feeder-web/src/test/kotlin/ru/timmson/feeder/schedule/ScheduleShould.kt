@@ -35,19 +35,19 @@ class ScheduleShould {
     }
 
     @Test
-    fun sendStocksToOwnerOnWorkingDays() {
+    fun sendStocksToChannelOnWorkingDays() {
         `when`(prodCal.isWorking(any())).thenReturn(true)
 
-        schedule.sendStocksToOwner()
+        schedule.sendStocksToChannel()
 
-        verify(feederFacade).sendStocksToOwner()
+        verify(feederFacade).sendStocksToChannel()
     }
 
     @Test
-    fun notSendStocksToOwnerOnHolidays() {
+    fun notSendStocksToChannelOnHolidays() {
         `when`(prodCal.isWorking(any())).thenReturn(false)
 
-        schedule.sendStocksToOwner()
+        schedule.sendStocksToChannel()
 
         verifyNoInteractions(feederFacade)
     }
