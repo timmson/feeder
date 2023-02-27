@@ -42,13 +42,35 @@ class StockServiceImplShould {
     }
 
     @Test
-    fun findAllExceptOne() {
-        val stock = Stock("", BigDecimal(2))
+    fun findAllExceptOneWhenCacheIsEmpty() {
+        val stock = Stock("", BigDecimal(3))
         val expected = stock.price.multiply(BigDecimal(stockService.getTickers().size - 1))
 
         `when`(moscowExchangeDAO.getStockByTicker(any()))
-            .thenReturn(stock).thenReturn(stock).thenThrow(NumberFormatException())
-        `when`(marketWatchDAO.getStockByTicker(any())).thenReturn(stock)
+            .thenReturn(stock, stock, stock, stock, stock)
+            .thenThrow(NumberFormatException())
+        `when`(marketWatchDAO.getStockByTicker(any()))
+            .thenReturn(stock)
+
+        stockService.findAll().sumOf { it.price }
+        stockService.resetCache()
+        val actual = stockService.findAll().sumOf { it.price }
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun findAllWhenCashIsFullFilled() {
+        val stock = Stock("", BigDecimal(4))
+        val expected = stock.price.multiply(BigDecimal(stockService.getTickers().size))
+
+        `when`(moscowExchangeDAO.getStockByTicker(any()))
+            .thenReturn(stock, stock, stock, stock, stock)
+            .thenThrow(NumberFormatException())
+        `when`(marketWatchDAO.getStockByTicker(any()))
+            .thenReturn(stock)
+
+        stockService.findAll().sumOf { it.price }
 
         val actual = stockService.findAll().sumOf { it.price }
 
