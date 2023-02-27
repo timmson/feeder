@@ -24,13 +24,13 @@ class Schedule(
     }
 
     @Scheduled(cron = "#{@feederConfig.scheduleStock}")
-    fun sendStocksToOwner() {
+    fun sendStocksToChannel() {
         val isWorking = prodCal.isWorking(LocalDate.now())
 
-        log.info("Entering sendStocksToOwner($isWorking)...")
+        log.info("Entering sendStocksToChannel($isWorking)...")
 
         if (isWorking) {
-            feederFacade.sendStocksToOwner()
+            feederFacade.sendStocksToChannel()
         }
     }
 

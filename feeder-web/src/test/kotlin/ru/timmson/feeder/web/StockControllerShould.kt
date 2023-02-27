@@ -44,6 +44,6 @@ class StockControllerShould {
     fun sendAllStocksToOwner() {
         webClient.get().uri("/stock/send").exchange().expectStatus().isOk
 
-        verify(feederFacade).sendStocksToOwner()
+        verify(feederFacade).sendStocksToChannel()
     }
 }

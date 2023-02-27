@@ -12,7 +12,7 @@ open class FeedWebApplication {
 
     private val log = logger<FeedWebApplication>()
 
-    private val version = "10 // stock calendar"
+    private val version = "11 // post to channel"
 
     @PostConstruct
     fun printInfo() {

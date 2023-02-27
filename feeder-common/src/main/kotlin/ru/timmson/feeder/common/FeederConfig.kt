@@ -17,4 +17,7 @@ class FeederConfig {
     @Value("\${feeder.stock.timeout}")
     var timeoutInMillis: Long = 0
 
+    @Value("\${feeder.stock.channelId}")
+    var stockChannelId: String = ""
+
 }

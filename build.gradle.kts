@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.spring.dependency-management") apply false
     kotlin("jvm")
     kotlin("plugin.spring") apply false
     id("org.springframework.boot") apply false
     id("org.jetbrains.kotlinx.kover") apply false
+    id("io.spring.dependency-management") apply false
 }
 
 val springVersion: String by project
@@ -22,9 +22,9 @@ val mockitoVersion: String by project
 val mockitoKotlinVersion: String by project
 
 subprojects {
-    apply(plugin = "io.spring.dependency-management")
     apply(plugin = "kotlin")
     apply(plugin = "org.jetbrains.kotlinx.kover")
+    apply(plugin = "io.spring.dependency-management")
 
     group = "ru.timmson.feeder"
     version = "1.0"
