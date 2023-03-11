@@ -7,12 +7,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
+import ru.timmson.feeder.Version
 import ru.timmson.feeder.common.FeederConfig
 
 @ExtendWith(MockitoExtension::class)
@@ -28,24 +27,28 @@ class BotServiceShould {
     @Mock
     private lateinit var botListener: BotListener
 
-    @Spy
+    @Mock
+    private lateinit var version: Version
+
+    @Mock
     private lateinit var response: SendResponse
 
     @BeforeEach
     fun setUp() {
-        botService = BotService(botProxy, feederConfig, botListener)
+        botService = BotService(botProxy, feederConfig, botListener, version)
     }
 
     @Test
     fun startupBotAndSetListenersAndSendMessageToOwner() {
         feederConfig.token = "X"
-        doReturn(true).`when`(response).isOk
+        `when`(response.isOk).thenReturn(true)
         `when`(botProxy.execute(any())).thenReturn(response)
 
         botService.postConstruct()
 
         verify(botProxy).startup(eq(feederConfig.token))
         verify(botProxy).setUpdatesListener(eq(botListener))
+        verify(botProxy).execute(any())
     }
 
     @Test

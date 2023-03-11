@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.reactive.server.WebTestClient
+import ru.timmson.feeder.Version
 import ru.timmson.feeder.service.FeederFacade
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
@@ -26,6 +27,9 @@ class StockControllerShould {
 
     @MockBean
     private lateinit var feederFacade: FeederFacade
+
+    @MockBean
+    private lateinit var version: Version
 
     @Autowired
     private lateinit var webClient: WebTestClient

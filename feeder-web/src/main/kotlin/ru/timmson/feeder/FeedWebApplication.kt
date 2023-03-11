@@ -8,15 +8,15 @@ import ru.timmson.feeder.common.logger
 
 @EnableScheduling
 @SpringBootApplication
-open class FeedWebApplication {
+open class FeedWebApplication(
+    private val version: Version
+) {
 
     private val log = logger<FeedWebApplication>()
 
-    private val version = "13 // Remove unnecessary interface"
-
     @PostConstruct
     fun printInfo() {
-        log.info("${FeedWebApplication::class.simpleName} version $version")
+        log.info("${FeedWebApplication::class.simpleName} version is $version")
     }
 
 }
