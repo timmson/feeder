@@ -16,9 +16,9 @@ import org.mockito.kotlin.verify
 import ru.timmson.feeder.common.FeederConfig
 
 @ExtendWith(MockitoExtension::class)
-class BotServiceImplShould {
+class BotServiceShould {
 
-    private lateinit var botService: BotServiceImpl
+    private lateinit var botService: BotService
 
     @Mock
     private lateinit var botProxy: BotProxy
@@ -33,7 +33,7 @@ class BotServiceImplShould {
 
     @BeforeEach
     fun setUp() {
-        botService = BotServiceImpl(botProxy, feederConfig, botListener)
+        botService = BotService(botProxy, feederConfig, botListener)
     }
 
     @Test

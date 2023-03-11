@@ -12,7 +12,7 @@ open class FeedWebApplication {
 
     private val log = logger<FeedWebApplication>()
 
-    private val version = "12 // cache"
+    private val version = "13 // Remove unnecessary interface"
 
     @PostConstruct
     fun printInfo() {

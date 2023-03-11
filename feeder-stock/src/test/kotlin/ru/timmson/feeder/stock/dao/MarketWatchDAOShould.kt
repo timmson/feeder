@@ -13,9 +13,9 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @ExtendWith(MockitoExtension::class)
-class MarketWatchDAOImplShould {
+class MarketWatchDAOShould {
 
-    private lateinit var marketWatchDAO: MarketWatchDAOImpl
+    private lateinit var marketWatchDAO: MarketWatchDAO
 
     @Mock
     private lateinit var requester: Requester
@@ -23,7 +23,7 @@ class MarketWatchDAOImplShould {
 
     @BeforeEach
     fun setUp() {
-        marketWatchDAO = MarketWatchDAOImpl(requester)
+        marketWatchDAO = MarketWatchDAO(requester)
     }
 
 

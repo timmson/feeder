@@ -11,16 +11,16 @@ import org.mockito.kotlin.*
 import ru.timmson.feeder.bot.subriber.BotSubscriber
 
 @ExtendWith(MockitoExtension::class)
-class BotListenerImplShould {
+class BotListenerShould {
 
-    private lateinit var botListener: BotListenerImpl
+    private lateinit var botListener: BotListener
 
     @Mock
     private lateinit var botSubscriber: BotSubscriber
 
     @BeforeEach
     fun setUp() {
-        botListener = BotListenerImpl()
+        botListener = BotListener()
     }
 
     @Test

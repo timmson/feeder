@@ -17,9 +17,9 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @ExtendWith(MockitoExtension::class)
-class MoscowExchangeDAOImplShould {
+class MoscowExchangeDAOShould {
 
-    private lateinit var moscowExchangeDAO: MoscowExchangeDAOImpl
+    private lateinit var moscowExchangeDAO: MoscowExchangeDAO
 
     @Mock
     private lateinit var requester: Requester
@@ -31,7 +31,7 @@ class MoscowExchangeDAOImplShould {
 
     @BeforeEach
     fun setUp() {
-        moscowExchangeDAO = MoscowExchangeDAOImpl(requester, objectMapper)
+        moscowExchangeDAO = MoscowExchangeDAO(requester, objectMapper)
     }
 
 

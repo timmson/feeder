@@ -1,19 +1,26 @@
 package ru.timmson.feeder.bot
 
+import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.UpdatesListener
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.response.SendResponse
+import org.springframework.stereotype.Service
 
-interface BotProxy {
+@Service
+class BotProxy {
 
-    fun startup(token: String)
+    private lateinit var bot: TelegramBot
 
-    fun setUpdatesListener(updatesListener: UpdatesListener)
+    fun startup(token: String) {
+        bot = TelegramBot(token)
+    }
 
-    fun execute(sendMessage: SendMessage): SendResponse
+    fun setUpdatesListener(updatesListener: UpdatesListener) = bot.setUpdatesListener(updatesListener)
 
-    fun removeGetUpdatesListener()
+    fun execute(sendMessage: SendMessage): SendResponse = bot.execute(sendMessage)
 
-    fun shutdown()
+    fun removeGetUpdatesListener() = bot.removeGetUpdatesListener()
+
+    fun shutdown() = bot.shutdown()
 
 }

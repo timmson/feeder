@@ -9,10 +9,10 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
-import ru.timmson.feeder.bot.BotServiceImpl
+import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.stock.model.Stock
-import ru.timmson.feeder.stock.service.StockServiceImpl
+import ru.timmson.feeder.stock.service.StockService
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
@@ -23,10 +23,10 @@ class FeederFacadeImplShould {
     private lateinit var feederConfig: FeederConfig
 
     @Mock
-    private lateinit var stockService: StockServiceImpl
+    private lateinit var stockService: StockService
 
     @Mock
-    private lateinit var botService: BotServiceImpl
+    private lateinit var botService: BotService
 
     @BeforeEach
     fun setUp() {

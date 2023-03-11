@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException
 
 class RequesterImplShould {
 
-    private lateinit var requesterImpl: RequesterImpl
+    private lateinit var requesterImpl: Requester
 
     private lateinit var webServer: MockWebServer
 
@@ -22,7 +22,7 @@ class RequesterImplShould {
     @BeforeEach
     fun setUp() {
         val config = FeederConfig().apply { timeoutInMillis = 500 }
-        requesterImpl = RequesterImpl(config)
+        requesterImpl = Requester(config)
         webServer = MockWebServer()
         url = webServer.url("/").toString()
     }
