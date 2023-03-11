@@ -17,7 +17,7 @@ class BotProxy {
 
     fun setUpdatesListener(updatesListener: UpdatesListener) = bot.setUpdatesListener(updatesListener)
 
-    fun execute(sendMessage: SendMessage): SendResponse = bot.execute(sendMessage)
+    fun execute(sendMessage: ru.timmson.feeder.bot.model.request.SendMessage): SendResponse = bot.execute(SendMessage(sendMessage.chatId, sendMessage.text))
 
     fun removeGetUpdatesListener() = bot.removeGetUpdatesListener()
 

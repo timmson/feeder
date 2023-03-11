@@ -1,14 +1,13 @@
 package ru.timmson.feeder.bot
 
-import com.pengrad.telegrambot.request.SendMessage
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.Version
+import ru.timmson.feeder.bot.model.request.SendMessage
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Service
 class BotService(
@@ -24,7 +23,7 @@ class BotService(
     fun postConstruct() {
         bot.startup(feederConfig.token)
         bot.setUpdatesListener(botListener)
-        sendMessageToOwner("Version is ${version}. Started at ${LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)}")
+        sendMessageToOwner("Version is ${version}. Started at ${LocalDateTime.now()}")
     }
 
     fun sendMessage(chatId: Any, messageText: String) {
