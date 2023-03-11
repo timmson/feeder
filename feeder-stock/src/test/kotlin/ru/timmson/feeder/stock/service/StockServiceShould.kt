@@ -14,9 +14,9 @@ import ru.timmson.feeder.stock.model.Stock
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
-class StockServiceImplShould {
+class StockServiceShould {
 
-    private lateinit var stockService: StockServiceImpl
+    private lateinit var stockService: StockService
 
     @Mock
     private lateinit var moscowExchangeDAO: MoscowExchangeDAO
@@ -26,7 +26,7 @@ class StockServiceImplShould {
 
     @BeforeEach
     fun setUp() {
-        stockService = StockServiceImpl(moscowExchangeDAO, marketWatchDAO)
+        stockService = StockService(moscowExchangeDAO, marketWatchDAO)
     }
 
     @Test

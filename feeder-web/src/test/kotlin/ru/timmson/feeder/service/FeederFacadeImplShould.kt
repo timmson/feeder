@@ -18,7 +18,7 @@ import java.math.BigDecimal
 @ExtendWith(MockitoExtension::class)
 class FeederFacadeImplShould {
 
-    private lateinit var feederFacade: FeederFacadeImpl
+    private lateinit var feederFacade: FeederFacade
 
     private lateinit var feederConfig: FeederConfig
 
@@ -31,7 +31,7 @@ class FeederFacadeImplShould {
     @BeforeEach
     fun setUp() {
         feederConfig = FeederConfig()
-        feederFacade = FeederFacadeImpl(feederConfig, stockService, botService)
+        feederFacade = FeederFacade(feederConfig, stockService, botService)
     }
 
     @Test

@@ -5,13 +5,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-class ProdCalImplShould {
+class ProdCalShould {
 
-    private lateinit var prodCal: ProdCalImpl
+    private lateinit var prodCal: ProdCal
 
     @BeforeEach
     fun setUp() {
-        prodCal = ProdCalImpl()
+        prodCal = ProdCal()
     }
 
     @Test
