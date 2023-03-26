@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class FeederConfig {
+
     @Value("\${feeder.tg.token}")
     var token: String = ""
 
@@ -19,5 +20,8 @@ class FeederConfig {
 
     @Value("\${feeder.stock.channelId}")
     var stockChannelId: String = ""
+
+    @Value("\${feeder.lingua.url}")
+    var linguaURL: String = ""
 
 }
