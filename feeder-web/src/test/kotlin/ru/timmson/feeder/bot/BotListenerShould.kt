@@ -1,5 +1,6 @@
 package ru.timmson.feeder.bot
 
+import com.pengrad.telegrambot.model.Message
 import com.pengrad.telegrambot.model.Update
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -9,6 +10,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.*
 import ru.timmson.feeder.bot.subriber.BotSubscriber
+import ru.timmson.feeder.common.injectValue
 
 @ExtendWith(MockitoExtension::class)
 class BotListenerShould {
@@ -27,7 +29,7 @@ class BotListenerShould {
     fun callSubscribers() {
         botListener.subscribe(botSubscriber)
 
-        botListener.process(mutableListOf(Update(), Update()))
+        botListener.process(mutableListOf(getUpdateWithMessage(), getUpdateWithMessage()))
 
         verify(botSubscriber, times(2)).receiveUpdate(any())
     }
@@ -41,5 +43,7 @@ class BotListenerShould {
 
         verifyNoInteractions(botSubscriber)
     }
+
+    private fun getUpdateWithMessage(): Update = injectValue(Update(), "message", Message())
 
 }

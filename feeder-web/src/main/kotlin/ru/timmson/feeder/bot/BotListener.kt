@@ -21,7 +21,7 @@ class BotListener : UpdatesListener {
     }
 
     private fun handle(updates: List<Update>) = runBlocking {
-        updates.forEach { u ->
+        updates.filter { it.message() != null }.forEach { u ->
             launch {
                 subscribers.forEach { s ->
                     launch {
