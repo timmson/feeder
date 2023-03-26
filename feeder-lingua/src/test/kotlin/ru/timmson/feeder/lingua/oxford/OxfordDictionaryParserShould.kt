@@ -20,8 +20,8 @@ class OxfordDictionaryParserShould {
 
         val actual = oxfordDictionaryParser.parse(source)
 
-        assertEquals(4, actual.meanings.size)
-        assertEquals(expected, actual.meanings[0].value)
+        assertEquals(4, actual.size)
+        assertEquals(expected, actual[0].value)
     }
 
 }

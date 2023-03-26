@@ -38,6 +38,7 @@ subprojects {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")
 
         implementation("org.springframework:spring-context:$springVersion")
+        implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 
         testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
