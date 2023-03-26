@@ -44,18 +44,18 @@ class FeederFacade(
         log.info("Leaving sendStocks(...)")
     }
 
-    fun sendMeaningToOwner(word: String) {
+    fun sendMeaningAndTranslation(chatId: String, word: String) {
         log.info("Entering sendMeaningToOwner([$word]) ...")
 
         linguaService.explain(word).let { response ->
             response.meanings.joinToString("\n\n") { "- ${it.value}" }.let { message ->
-                botService.sendMessageToOwner("${message}\n\n${response.url}")
+                botService.sendMessage(chatId, "${message}\n\n${response.url}")
             }
         }
 
         linguaService.translate(word).let { response ->
             response.translate.joinToString("\n\n") { "- ${it.value}" }.let { message ->
-                botService.sendMessageToOwner("${message}\n\n${response.url}")
+                botService.sendMessage(chatId, "${message}\n\n${response.url}")
             }
         }
 

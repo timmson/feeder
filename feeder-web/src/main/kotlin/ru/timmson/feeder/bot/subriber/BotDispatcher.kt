@@ -24,7 +24,7 @@ class BotDispatcher(
             update.message().text().let {
                 when {
                     it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
-                    it.startsWith("/w") -> feederFacade.sendMeaningToOwner(it.replace("/w", "").trim())
+                    it.startsWith("/w") -> feederFacade.sendMeaningAndTranslation(chantId.toString(), it.replace("/w", "").trim())
                 }
             }
         }

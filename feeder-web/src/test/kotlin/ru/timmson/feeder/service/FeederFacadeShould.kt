@@ -73,10 +73,11 @@ class FeederFacadeShould {
     }
 
     @Test
-    fun sendMeaningToOwner() {
-        val explanation = "some meaning"
-        val translation = "some translation"
+    fun sendMeaning() {
+        val chatId = "1"
         val word = "some word"
+        val translation = "some translation"
+        val explanation = "some meaning"
         val linguaLeoTranslationResponse = LinguaLeoTranslationResponse().apply {
             url = ""
             translate = listOf(LinguaLeoTranslation().apply {
@@ -88,8 +89,8 @@ class FeederFacadeShould {
         `when`(linguaService.explain(eq(word))).thenReturn(oxfordDictionaryExplainResponse)
         `when`(linguaService.translate(eq(word))).thenReturn(linguaLeoTranslationResponse)
 
-        feederFacade.sendMeaningToOwner(word)
+        feederFacade.sendMeaningAndTranslation(chatId, word)
 
-        verify(botService, times(2)).sendMessageToOwner(any())
+        verify(botService, times(2)).sendMessage(eq(chatId), any())
     }
 }
