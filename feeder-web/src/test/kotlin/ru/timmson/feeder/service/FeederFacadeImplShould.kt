@@ -11,12 +11,16 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
+import ru.timmson.feeder.lingua.LinguaService
+import ru.timmson.feeder.lingua.model.ExplainResponse
+import ru.timmson.feeder.lingua.model.Meaning
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
 class FeederFacadeImplShould {
+
 
     private lateinit var feederFacade: FeederFacade
 
@@ -26,12 +30,15 @@ class FeederFacadeImplShould {
     private lateinit var stockService: StockService
 
     @Mock
+    private lateinit var linguaService: LinguaService
+
+    @Mock
     private lateinit var botService: BotService
 
     @BeforeEach
     fun setUp() {
         feederConfig = FeederConfig()
-        feederFacade = FeederFacade(feederConfig, stockService, botService)
+        feederFacade = FeederFacade(feederConfig, stockService, linguaService, botService)
     }
 
     @Test
@@ -59,5 +66,16 @@ class FeederFacadeImplShould {
         feederFacade.sendStocksToChannel()
 
         verify(botService).sendMessage(eq(feederConfig.stockChannelId), eq("💰10, 🇺🇸20"))
+    }
+
+    @Test
+    fun sendMeaningToOwner() {
+        val expected = "some meaning"
+        val word = "some word"
+
+        `when`(linguaService.explain(eq(word))).thenReturn(ExplainResponse(listOf(Meaning(expected))))
+        feederFacade.sendMeaningToOwner(word)
+
+        verify(botService).sendMessageToOwner(eq(expected))
     }
 }

@@ -21,5 +21,7 @@ pluginManagement {
 
 include("feeder-calendar")
 include("feeder-common")
+include("feeder-lingua")
 include("feeder-stock")
+include("feeder-test")
 include("feeder-web")
