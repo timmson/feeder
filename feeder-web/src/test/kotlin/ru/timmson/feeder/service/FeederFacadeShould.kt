@@ -7,19 +7,23 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.lingua.LinguaService
-import ru.timmson.feeder.lingua.model.ExplainResponse
-import ru.timmson.feeder.lingua.model.Meaning
+import ru.timmson.feeder.lingua.oxford.model.Meaning
+import ru.timmson.feeder.lingua.oxford.model.OxfordDictionaryExplainResponse
+import ru.timmson.feeder.lingua.translate.model.LinguaLeoTranslation
+import ru.timmson.feeder.lingua.translate.model.LinguaLeoTranslationResponse
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
-class FeederFacadeImplShould {
+class FeederFacadeShould {
 
 
     private lateinit var feederFacade: FeederFacade
@@ -69,13 +73,24 @@ class FeederFacadeImplShould {
     }
 
     @Test
-    fun sendMeaningToOwner() {
-        val expected = "some meaning"
+    fun sendMeaning() {
+        val chatId = "1"
         val word = "some word"
+        val translation = "some translation"
+        val explanation = "some meaning"
+        val linguaLeoTranslationResponse = LinguaLeoTranslationResponse().apply {
+            url = ""
+            translate = listOf(LinguaLeoTranslation().apply {
+                value = translation
+            })
+        }
+        val oxfordDictionaryExplainResponse = OxfordDictionaryExplainResponse(url = "", meanings = listOf(Meaning(explanation)))
 
-        `when`(linguaService.explain(eq(word))).thenReturn(ExplainResponse(listOf(Meaning(expected))))
-        feederFacade.sendMeaningToOwner(word)
+        `when`(linguaService.explain(eq(word))).thenReturn(oxfordDictionaryExplainResponse)
+        `when`(linguaService.translate(eq(word))).thenReturn(linguaLeoTranslationResponse)
 
-        verify(botService).sendMessageToOwner(eq(expected))
+        feederFacade.sendMeaningAndTranslation(chatId, word)
+
+        verify(botService, times(2)).sendMessage(eq(chatId), any())
     }
 }

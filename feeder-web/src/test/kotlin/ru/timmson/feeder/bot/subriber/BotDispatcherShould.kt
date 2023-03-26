@@ -86,6 +86,6 @@ class BotDispatcherShould {
         botDispatcher.receiveUpdate(update)
 
         verifyNoInteractions(botService)
-        verify(feederFacade).sendMeaningToOwner(eq(expected))
+        verify(feederFacade).sendMeaningAndTranslation(eq(chatId.toString()), eq(expected))
     }
 }

@@ -1,5 +1,5 @@
-val mockHttpClientVersion: String by project
 val jsoupVersion: String by project
+val mockHttpClientVersion: String by project
 
 dependencies {
     implementation(project(":feeder-common"))
@@ -9,4 +9,5 @@ dependencies {
 
     testImplementation(project(":feeder-test"))
 }
+
 
