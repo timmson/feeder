@@ -9,7 +9,6 @@ import ru.timmson.feeder.lingua.model.Meaning
 class OxfordDictionaryParser {
 
     fun parse(source: String): ExplainResponse {
-        println(source)
 
         val meanings = Jsoup.parse(source).run {
             select("span.def").eachText().map { Meaning(it) }
