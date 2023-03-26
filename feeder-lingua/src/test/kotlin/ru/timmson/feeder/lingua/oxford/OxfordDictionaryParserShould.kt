@@ -1,19 +1,27 @@
 package ru.timmson.feeder.lingua.oxford
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class OxfordDictionaryParserShould {
 
+    private lateinit var oxfordDictionaryParser: OxfordDictionaryParser
+
+    @BeforeEach
+    fun setUp() {
+        oxfordDictionaryParser = OxfordDictionaryParser()
+    }
+
     @Test
     fun parse() {
-        //val expected = ExplainResponse(meaning = "some meaning")
-        //val source =  this::class.java.getResourceAsStream("oxford-dictionary.html").bufferedReader().readLines()
+        val expected = "a piece of work involving careful study of a subject over a period of time, done by school or college students"
+        val source = OxfordDictionaryParserShould::class.java.classLoader.getResource("oxford-dictionary.html").readText(Charsets.UTF_8)
 
-        //println(source)
+        val actual = oxfordDictionaryParser.parse(source)
 
-        //val actual = OxfordDictionaryParser().parse(source)
-
-        //assertEquals(expected, actual)
+        assertEquals(4, actual.meanings.size)
+        assertEquals(expected, actual.meanings[0].value)
     }
 
 }

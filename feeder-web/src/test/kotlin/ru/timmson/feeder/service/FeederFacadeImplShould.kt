@@ -13,6 +13,7 @@ import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.lingua.model.ExplainResponse
+import ru.timmson.feeder.lingua.model.Meaning
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
 import java.math.BigDecimal
@@ -72,7 +73,7 @@ class FeederFacadeImplShould {
         val expected = "some meaning"
         val word = "some word"
 
-        `when`(linguaService.explain(eq(word))).thenReturn(ExplainResponse(meaning = expected))
+        `when`(linguaService.explain(eq(word))).thenReturn(ExplainResponse(listOf(Meaning(expected))))
         feederFacade.sendMeaningToOwner(word)
 
         verify(botService).sendMessageToOwner(eq(expected))

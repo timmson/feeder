@@ -47,8 +47,10 @@ class FeederFacade(
     fun sendMeaningToOwner(word: String) {
         log.info("Entering sendMeaningToOwner([$word]) ...")
 
-        linguaService.explain(word).let {
-            botService.sendMessageToOwner(it.meaning)
+        linguaService.explain(word).let { response ->
+            response.meanings.joinToString("\n\n") { it.value }.let { message ->
+                botService.sendMessageToOwner(message)
+            }
         }
 
         log.info("Leaving sendMeaningToOwner(...)")

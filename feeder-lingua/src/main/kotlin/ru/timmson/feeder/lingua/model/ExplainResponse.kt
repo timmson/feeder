@@ -1,3 +1,5 @@
 package ru.timmson.feeder.lingua.model
 
-data class ExplainResponse(val meaning: String)
+data class ExplainResponse(
+    val meanings: List<Meaning>
+)

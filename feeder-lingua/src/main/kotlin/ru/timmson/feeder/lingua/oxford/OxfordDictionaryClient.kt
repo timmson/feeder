@@ -14,13 +14,16 @@ class OxfordDictionaryClient(
 
     private val httpClient: OkHttpClient by lazy { OkHttpClient() }
 
-    private fun createRequest(word: String) =
-        Request.Builder().url("${feederConfig.linguaURL}definition/english/$word").build()
+    private fun createRequest(url: String): Request {
+        return Request.Builder().url(url).build()
+    }
 
     fun fetch(word: String): String {
-        log.info("Fetching ([$word]) ...")
+        val url = "${feederConfig.linguaURL}definition/english/$word"
 
-        val response = createRequest(word).let {
+        log.info("Fetching ($url) ...")
+
+        val response = createRequest(url).let {
             httpClient.newCall(it).execute().let { response ->
                 response.body?.string() ?: ""
             }
