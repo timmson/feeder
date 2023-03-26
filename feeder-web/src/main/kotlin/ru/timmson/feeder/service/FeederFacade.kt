@@ -4,12 +4,14 @@ import org.springframework.stereotype.Service
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
+import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.stock.service.StockService
 
 @Service
 class FeederFacade(
     private val feederConfig: FeederConfig,
     private val stockService: StockService,
+    private val linguaService: LinguaService,
     private val botService: BotService
 ) {
 
@@ -40,5 +42,15 @@ class FeederFacade(
         send(message)
 
         log.info("Leaving sendStocks(...)")
+    }
+
+    fun sendMeaningToOwner(word: String) {
+        log.info("Entering sendMeaningToOwner([$word]) ...")
+
+        linguaService.explain(word).let {
+            botService.sendMessageToOwner(it.meaning)
+        }
+
+        log.info("Leaving sendMeaningToOwner(...)")
     }
 }

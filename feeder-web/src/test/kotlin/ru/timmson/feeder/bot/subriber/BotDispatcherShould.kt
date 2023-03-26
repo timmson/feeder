@@ -74,4 +74,18 @@ class BotDispatcherShould {
         verifyNoInteractions(botService)
         verify(feederFacade).sendStocksToOwner()
     }
+
+    @Test
+    fun askFacadeForMeaningOfTheWord() {
+        val chatId = 1L
+        feederConfig.ownerId = chatId.toString()
+        val expected = "some word"
+
+        doReturn("/w $expected").`when`(message).text()
+        doReturn(chatId).`when`(chat).id()
+        botDispatcher.receiveUpdate(update)
+
+        verifyNoInteractions(botService)
+        verify(feederFacade).sendMeaningToOwner(eq(expected))
+    }
 }

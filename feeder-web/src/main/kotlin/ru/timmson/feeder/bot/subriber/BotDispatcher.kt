@@ -21,8 +21,11 @@ class BotDispatcher(
         if (chantId != feederConfig.ownerId.toLong()) {
             botService.sendMessage(chantId, "Sorry :(")
         } else {
-            when (update.message().text()) {
-                "/stock" -> feederFacade.sendStocksToOwner()
+            update.message().text().let {
+                when {
+                    it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
+                    it.startsWith("/w") -> feederFacade.sendMeaningToOwner(it.replace("/w", "").trim())
+                }
             }
         }
     }
