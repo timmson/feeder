@@ -1,6 +1,6 @@
 version: "2"
 services:
-  mbt-feed-svc:
+  feeder:
     image: "feeder"
     container_name: "feeder-srv"
     build:
