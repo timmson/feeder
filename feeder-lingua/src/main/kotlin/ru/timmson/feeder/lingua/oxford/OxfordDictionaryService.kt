@@ -11,10 +11,8 @@ class OxfordDictionaryService(
     private val oxfordDictionaryParser: OxfordDictionaryParser
 ) {
 
-    private fun createUrl(word: String): String = "${feederConfig.oxfordDictionaryUrl}definition/english/$word"
-
     fun explain(word: String): OxfordDictionaryExplainResponse {
-        val url = createUrl(word)
+        val url = "${feederConfig.oxfordDictionaryUrl}definition/english/$word"
 
         return oxfordDictionaryClient.fetch(url).let {
             oxfordDictionaryParser.parse(it).let { meanings ->
