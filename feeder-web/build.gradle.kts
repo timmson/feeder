@@ -9,7 +9,7 @@ dependencies {
     implementation(project(":feeder-lingua"))
     implementation(project(":feeder-stock"))
 
-    implementation("org.springframework.boot:spring-boot-starter-webflux:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("com.github.pengrad:java-telegram-bot-api:$tgBotAPIVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")

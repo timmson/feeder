@@ -4,22 +4,22 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class FeedWebApplicationShould {
+class FeedApplicationShould {
 
-    private lateinit var feedWebApplication: FeedWebApplication
+    private lateinit var feedApplication: FeedApplication
 
     private lateinit var version: Version
 
     @BeforeEach
     fun setUp() {
         version = Version()
-        feedWebApplication = FeedWebApplication(version)
+        feedApplication = FeedApplication(version)
     }
 
 
     @Test
     fun printInfo() {
-        assertNotNull(feedWebApplication.printInfo())
+        assertNotNull(feedApplication.printInfo())
     }
 
 }
