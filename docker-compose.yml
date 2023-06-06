@@ -5,8 +5,6 @@ services:
     container_name: "feeder-srv"
     build:
       context: .
-    ports:
-      - "9090:9090"
     restart: always
     volumes:
       - ./config:/config
