@@ -8,19 +8,19 @@ import ru.timmson.feeder.common.logger
 
 @EnableScheduling
 @SpringBootApplication
-open class FeedWebApplication(
+open class FeedApplication(
     private val version: Version
 ) {
 
-    private val log = logger<FeedWebApplication>()
+    private val log = logger<FeedApplication>()
 
     @PostConstruct
     fun printInfo() {
-        log.info("${FeedWebApplication::class.simpleName} version is $version")
+        log.info("${FeedApplication::class.simpleName} version is $version")
     }
 
 }
 
 fun main(args: Array<String>) {
-    runApplication<FeedWebApplication>(*args)
+    runApplication<FeedApplication>(*args)
 }
