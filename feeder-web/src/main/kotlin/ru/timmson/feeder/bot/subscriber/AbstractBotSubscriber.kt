@@ -1,4 +1,4 @@
-package ru.timmson.feeder.bot.subriber
+package ru.timmson.feeder.bot.subscriber
 
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy

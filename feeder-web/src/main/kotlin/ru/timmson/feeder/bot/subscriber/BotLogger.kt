@@ -1,4 +1,4 @@
-package ru.timmson.feeder.bot.subriber
+package ru.timmson.feeder.bot.subscriber
 
 import com.pengrad.telegrambot.model.Update
 import org.springframework.stereotype.Service

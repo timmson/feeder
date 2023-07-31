@@ -2,16 +2,22 @@ package ru.timmson.feeder.service
 
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.bot.BotService
+import ru.timmson.feeder.bot.model.request.SendMessage
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
+import ru.timmson.feeder.cv.CVRegisterRequest
+import ru.timmson.feeder.cv.CVRegistrar
 import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.stock.service.StockService
+import java.time.LocalDate
 
 @Service
 class FeederFacade(
     private val feederConfig: FeederConfig,
     private val stockService: StockService,
     private val linguaService: LinguaService,
+    private val cvRegistrar: CVRegistrar,
+    private val printService: PrintService,
     private val botService: BotService
 ) {
 
@@ -60,5 +66,15 @@ class FeederFacade(
         }
 
         log.info("Leaving sendMeaningToOwner(...)")
+    }
+
+    fun registerCV(chatId: String, forwardedMessageId: String, caption: String, fileName: String) {
+        log.info("Entering registerCV([$fileName]) ...")
+
+        val cv = cvRegistrar.parse(CVRegisterRequest(caption = caption, fileName = fileName))
+        val text = printService.printCV(cv, LocalDate.now())
+        botService.sendMessage(SendMessage(chatId, "<code>$text</code>\n\n<code>${feederConfig.cvChannelUrl}$forwardedMessageId</code>", true))
+
+        log.info("Leaving registerCV(...) = $cv")
     }
 }
