@@ -27,4 +27,7 @@ class FeederConfig {
     @Value("\${feeder.lingua.linguaLeoUrl}")
     var linguaLeoUrl: String = ""
 
+    @Value("\${feeder.cv.channelUrl}")
+    var cvChannelUrl: String = ""
+
 }

@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.model.Update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
-import ru.timmson.feeder.bot.subriber.BotSubscriber
+import ru.timmson.feeder.bot.subscriber.BotSubscriber
 import ru.timmson.feeder.common.logger
 
 @Service

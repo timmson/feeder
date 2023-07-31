@@ -1,7 +1,6 @@
 package ru.timmson.feeder.bot
 
 import com.pengrad.telegrambot.response.SendResponse
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,6 +11,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
 import ru.timmson.feeder.Version
+import ru.timmson.feeder.bot.model.request.SendMessage
 import ru.timmson.feeder.common.FeederConfig
 
 @ExtendWith(MockitoExtension::class)
@@ -48,7 +48,16 @@ class BotServiceShould {
 
         verify(botProxy).startup(eq(feederConfig.token))
         verify(botProxy).setUpdatesListener(eq(botListener))
-        verify(botProxy).execute(any())
+    }
+
+    @Test
+    fun sendMessage() {
+        val message = SendMessage("1", "text", true)
+
+        `when`(response.isOk).thenReturn(true)
+        `when`(botProxy.execute(eq(message))).thenReturn(response)
+
+        botService.sendMessage(message)
     }
 
     @Test

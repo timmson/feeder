@@ -32,6 +32,12 @@ class BotService(
         log.info("Leaving sendMessage (...) = ${response.isOk}")
     }
 
+    fun sendMessage(message: SendMessage) {
+        log.info("Entering sendMessage (${message.chatId}, '${message.text}') ...")
+        val response = bot.execute(message)
+        log.info("Leaving sendMessage (...) = ${response.isOk}")
+    }
+
     fun sendMessageToOwner(messageText: String) {
         sendMessage(feederConfig.ownerId, messageText)
     }

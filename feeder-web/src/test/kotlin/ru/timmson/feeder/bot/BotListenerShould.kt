@@ -2,14 +2,16 @@ package ru.timmson.feeder.bot
 
 import com.pengrad.telegrambot.model.Message
 import com.pengrad.telegrambot.model.Update
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.*
-import ru.timmson.feeder.bot.subriber.BotSubscriber
+import org.mockito.kotlin.any
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import ru.timmson.feeder.bot.subscriber.BotSubscriber
 import ru.timmson.feeder.common.injectValue
 
 @ExtendWith(MockitoExtension::class)

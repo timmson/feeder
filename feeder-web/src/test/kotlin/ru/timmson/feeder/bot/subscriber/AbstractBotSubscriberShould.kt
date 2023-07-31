@@ -1,7 +1,6 @@
-package ru.timmson.feeder.bot.subriber
+package ru.timmson.feeder.bot.subscriber
 
 import com.pengrad.telegrambot.model.Update
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

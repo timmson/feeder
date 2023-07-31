@@ -1,16 +1,18 @@
-package ru.timmson.feeder.bot.subriber
+package ru.timmson.feeder.bot.subscriber
 
 import com.pengrad.telegrambot.model.Chat
 import com.pengrad.telegrambot.model.Message
 import com.pengrad.telegrambot.model.Update
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.*
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import ru.timmson.feeder.bot.BotListener
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
@@ -59,6 +61,19 @@ class BotDispatcherShould {
         botDispatcher.receiveUpdate(update)
 
         verify(botService).sendMessage(eq(senderId), eq(expected))
+        verifyNoInteractions(feederFacade)
+    }
+
+    @Test
+    fun sendSorryWhenMessageIsNotOfAcceptableFormat() {
+        val expected = "This message does not contain any of known formats ;("
+        val chatId = 1L
+        feederConfig.ownerId = chatId.toString()
+
+        doReturn(chatId).`when`(chat).id()
+        botDispatcher.receiveUpdate(update)
+
+        verify(botService).sendMessage(eq(chatId), eq(expected))
         verifyNoInteractions(feederFacade)
     }
 
