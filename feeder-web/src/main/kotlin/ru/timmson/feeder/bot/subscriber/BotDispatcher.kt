@@ -6,6 +6,7 @@ import ru.timmson.feeder.bot.BotListener
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.service.FeederFacade
+import ru.timmson.feeder.service.RegisterCVRequest
 
 @Service
 class BotDispatcher(
@@ -33,7 +34,15 @@ class BotDispatcher(
 
                 update.message().document() != null -> {
                     update.message().let {
-                        feederFacade.registerCV(chantId.toString(), it.forwardFromMessageId().toString(), it.caption(), it.document().fileName())
+                        feederFacade.registerCV(
+                            RegisterCVRequest(
+                                chantId.toString(),
+                                it.forwardFromMessageId(),
+                                it.forwardDate(),
+                                it.caption(),
+                                it.document().fileName()
+                            )
+                        )
                     }
                 }
 

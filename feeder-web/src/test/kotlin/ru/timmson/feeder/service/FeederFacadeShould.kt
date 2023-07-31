@@ -104,15 +104,17 @@ class FeederFacadeShould {
     @Test
     fun registerCV() {
         val chatId = "1"
-        val messageId = "2"
+        val messageId = 2
+        val messageTimestamp = 1231313
         val caption = "caption"
         val fileName = "fileName"
         val request = CVRegisterRequest(caption = caption, fileName = fileName)
         val cv = CV()
+        val cvRequest = RegisterCVRequest(chatId, messageId, messageTimestamp, caption, fileName)
 
         `when`(cvRegistrar.parse(eq(request))).thenReturn(cv)
         `when`(printService.printCV(eq(cv), any())).thenReturn("")
-        feederFacade.registerCV(chatId, messageId, caption, fileName)
+        feederFacade.registerCV(cvRequest)
 
         verify(botService, times(1)).sendMessage(any())
     }
