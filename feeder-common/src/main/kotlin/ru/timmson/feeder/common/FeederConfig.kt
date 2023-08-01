@@ -30,4 +30,9 @@ class FeederConfig {
     @Value("\${feeder.cv.channelUrl}")
     var cvChannelUrl: String = ""
 
+    @Value("\${feeder.cv.airtableUrl}")
+    var airtableUrl: String = ""
+
+    @Value("\${feeder.cv.airtableToken}")
+    var airtableToken: String = ""
 }

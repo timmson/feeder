@@ -12,6 +12,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
+import ru.timmson.feeder.cv.AirtableAPIClient
 import ru.timmson.feeder.cv.CV
 import ru.timmson.feeder.cv.CVRegisterRequest
 import ru.timmson.feeder.cv.CVRegistrar
@@ -44,12 +45,15 @@ class FeederFacadeShould {
     private lateinit var printService: PrintService
 
     @Mock
+    private lateinit var airtableAPIClient: AirtableAPIClient
+
+    @Mock
     private lateinit var botService: BotService
 
     @BeforeEach
     fun setUp() {
         feederConfig = FeederConfig()
-        feederFacade = FeederFacade(feederConfig, stockService, linguaService, cvRegistrar, printService, botService)
+        feederFacade = FeederFacade(feederConfig, stockService, linguaService, cvRegistrar, printService, airtableAPIClient, botService)
     }
 
     @Test
@@ -104,15 +108,17 @@ class FeederFacadeShould {
     @Test
     fun registerCV() {
         val chatId = "1"
-        val messageId = "2"
+        val messageId = 2
+        val messageTimestamp = 1231313
         val caption = "caption"
         val fileName = "fileName"
         val request = CVRegisterRequest(caption = caption, fileName = fileName)
         val cv = CV()
+        val cvRequest = RegisterCVRequest(chatId, messageId, messageTimestamp, caption, fileName)
 
         `when`(cvRegistrar.parse(eq(request))).thenReturn(cv)
         `when`(printService.printCV(eq(cv), any())).thenReturn("")
-        feederFacade.registerCV(chatId, messageId, caption, fileName)
+        feederFacade.registerCV(cvRequest)
 
         verify(botService, times(1)).sendMessage(any())
     }

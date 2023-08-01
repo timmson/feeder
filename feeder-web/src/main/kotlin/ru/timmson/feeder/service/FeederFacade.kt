@@ -3,13 +3,17 @@ package ru.timmson.feeder.service
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.bot.model.request.SendMessage
+import ru.timmson.feeder.common.Date
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
+import ru.timmson.feeder.cv.AirtableAPIClient
 import ru.timmson.feeder.cv.CVRegisterRequest
 import ru.timmson.feeder.cv.CVRegistrar
+import ru.timmson.feeder.cv.model.Fields
+import ru.timmson.feeder.cv.model.Record
 import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.stock.service.StockService
-import java.time.LocalDate
+import java.util.concurrent.atomic.AtomicInteger
 
 @Service
 class FeederFacade(
@@ -18,10 +22,13 @@ class FeederFacade(
     private val linguaService: LinguaService,
     private val cvRegistrar: CVRegistrar,
     private val printService: PrintService,
+    private val airtableAPIClient: AirtableAPIClient,
     private val botService: BotService
 ) {
 
     private val log = logger<FeederFacade>()
+
+    private val counter = AtomicInteger()
 
     private val stocks = mapOf(
         "usd" to "💰",
@@ -68,13 +75,38 @@ class FeederFacade(
         log.info("Leaving sendMeaningToOwner(...)")
     }
 
-    fun registerCV(chatId: String, forwardedMessageId: String, caption: String, fileName: String) {
-        log.info("Entering registerCV([$fileName]) ...")
+    fun registerCV(cvRequest: RegisterCVRequest) {
+        log.info("Entering registerCV([${cvRequest.fileName}]) ...")
 
-        val cv = cvRegistrar.parse(CVRegisterRequest(caption = caption, fileName = fileName))
-        val text = printService.printCV(cv, LocalDate.now())
-        botService.sendMessage(SendMessage(chatId, "<code>$text</code>\n\n<code>${feederConfig.cvChannelUrl}$forwardedMessageId</code>", true))
+        val date = Date.format(cvRequest.forwardedMessagedTimeStamp.toLong())
+        val cv = cvRegistrar.parse(CVRegisterRequest(caption = cvRequest.caption, fileName = cvRequest.fileName))
+        val text = printService.printCV(cv, date)
 
-        log.info("Leaving registerCV(...) = $cv")
+        val record =
+            Record(
+                Fields(
+                    name = cv.name,
+                    area = cv.area,
+                    title = cv.title,
+                    type = cv.type,
+                    date = date,
+                    sort = counter.incrementAndGet()
+                )
+            )
+        val code = airtableAPIClient.add(record)
+
+        botService.sendMessage(
+            SendMessage(
+                cvRequest.chatId,
+                listOf(
+                    "<code>$text</code>",
+                    "<code>${feederConfig.cvChannelUrl}${cvRequest.forwardedMessageId}</code>",
+                    "<code>${code}</code>"
+                ).joinToString("\n\n"),
+                true
+            )
+        )
+
+        log.info("Leaving registerCV(...) = $cv, $code")
     }
 }
