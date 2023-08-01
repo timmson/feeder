@@ -6,8 +6,11 @@ import ru.timmson.feeder.bot.model.request.SendMessage
 import ru.timmson.feeder.common.Date
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
+import ru.timmson.feeder.cv.AirtableAPIClient
 import ru.timmson.feeder.cv.CVRegisterRequest
 import ru.timmson.feeder.cv.CVRegistrar
+import ru.timmson.feeder.cv.model.Fields
+import ru.timmson.feeder.cv.model.Record
 import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.stock.service.StockService
 
@@ -18,6 +21,7 @@ class FeederFacade(
     private val linguaService: LinguaService,
     private val cvRegistrar: CVRegistrar,
     private val printService: PrintService,
+    private val airtableAPIClient: AirtableAPIClient,
     private val botService: BotService
 ) {
 
@@ -71,17 +75,34 @@ class FeederFacade(
     fun registerCV(cvRequest: RegisterCVRequest) {
         log.info("Entering registerCV([${cvRequest.fileName}]) ...")
 
+        val date = Date.format(cvRequest.forwardedMessagedTimeStamp.toLong())
         val cv = cvRegistrar.parse(CVRegisterRequest(caption = cvRequest.caption, fileName = cvRequest.fileName))
-        val text = printService.printCV(cv, Date.format(cvRequest.forwardedMessagedTimeStamp.toLong()))
+        val text = printService.printCV(cv, date)
+
+        val record =
+            Record(
+                Fields(
+                    name = cv.name,
+                    area = cv.area,
+                    title = cv.title,
+                    type = cv.type,
+                    date = date
+                )
+            )
+        val code = airtableAPIClient.add(record)
 
         botService.sendMessage(
             SendMessage(
                 cvRequest.chatId,
-                "<code>$text</code>\n\n<code>${feederConfig.cvChannelUrl}${cvRequest.forwardedMessageId}</code>",
+                listOf(
+                    "<code>$text</code>",
+                    "<code>${feederConfig.cvChannelUrl}${cvRequest.forwardedMessageId}</code>",
+                    "<code>${code}</code>"
+                ).joinToString("\n\n"),
                 true
             )
         )
 
-        log.info("Leaving registerCV(...) = $cv")
+        log.info("Leaving registerCV(...) = $cv, $code")
     }
 }

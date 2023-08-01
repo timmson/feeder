@@ -1,14 +1,25 @@
 package ru.timmson.feeder.cv
 
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.junit.jupiter.MockitoExtension
 
+
+@ExtendWith(MockitoExtension::class)
 class CVRegistrarShould {
 
+    private lateinit var cvRegistrar: CVRegistrar
+
+    @BeforeEach
+    fun setUp() {
+        cvRegistrar = CVRegistrar()
+    }
+
     @Test
-    fun parse() {
-        assertTrue(true)
-        /*val expectedCV = CV().apply {
+    fun save() {
+        val expectedCV = CV().apply {
             name = "Иванов"
             area = "Омск"
             title = "SDET"
@@ -22,8 +33,8 @@ class CVRegistrarShould {
                 "#sdet"
         val request = CVRegisterRequest(caption = caption, fileName = "Иванов Иван SDET.docx")
 
-        val actualCV = CVRegistrar(FeederConfig()).parse(request)
+        val actualCV = cvRegistrar.parse(request)
 
-        assertEquals(expectedCV, actualCV)*/
+        assertEquals(expectedCV, actualCV)
     }
 }

@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service
 @Service
 class FeederConfig {
 
-    val airtableToken: String = ""
-    val airtableUrl: String = ""
-
     @Value("\${feeder.tg.token}")
     var token: String = ""
 
@@ -33,4 +30,9 @@ class FeederConfig {
     @Value("\${feeder.cv.channelUrl}")
     var cvChannelUrl: String = ""
 
+    @Value("\${feeder.cv.airtableUrl}")
+    var airtableUrl: String = ""
+
+    @Value("\${feeder.cv.airtableToken}")
+    var airtableToken: String = ""
 }

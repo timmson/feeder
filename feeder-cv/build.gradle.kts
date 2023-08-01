@@ -5,5 +5,5 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:$mockHttpClientVersion")
 
-    //testImplementation(project(":feeder-test"))
+    testImplementation(project(":feeder-test"))
 }
