@@ -41,13 +41,14 @@ class AirtableAPIClient(
                 .build()
         }
 
-        val code = httpClient.newCall(request).execute().let { response ->
-            log.fine(response.toString())
-            response.code
+        val response = httpClient.newCall(request).execute()
+
+        if (response.code == 200) {
+            log.info("Leaving add(...) = ${response.code}")
+        } else {
+            log.info("Leaving add(...) = [${response.code},${response.body.toString()}]")
         }
 
-        log.info("Leaving add(...) = $code")
-
-        return code
+        return response.code
     }
 }
