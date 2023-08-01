@@ -13,6 +13,7 @@ import ru.timmson.feeder.cv.model.Fields
 import ru.timmson.feeder.cv.model.Record
 import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.stock.service.StockService
+import java.util.concurrent.atomic.AtomicInteger
 
 @Service
 class FeederFacade(
@@ -26,6 +27,8 @@ class FeederFacade(
 ) {
 
     private val log = logger<FeederFacade>()
+
+    private val counter = AtomicInteger()
 
     private val stocks = mapOf(
         "usd" to "💰",
@@ -86,7 +89,8 @@ class FeederFacade(
                     area = cv.area,
                     title = cv.title,
                     type = cv.type,
-                    date = date
+                    date = date,
+                    sort = counter.incrementAndGet()
                 )
             )
         val code = airtableAPIClient.add(record)

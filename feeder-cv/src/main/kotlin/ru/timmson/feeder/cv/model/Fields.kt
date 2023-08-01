@@ -6,5 +6,6 @@ data class Fields(
     val title: String,
     val type: String,
     val date: String,
-    val verified: Boolean = false
+    val verified: Boolean = false,
+    val sort: Int = 0
 )
