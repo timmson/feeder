@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service
 @Service
 class FeederConfig {
 
+    val airtableToken: String = ""
+    val airtableUrl: String = ""
+
     @Value("\${feeder.tg.token}")
     var token: String = ""
 
