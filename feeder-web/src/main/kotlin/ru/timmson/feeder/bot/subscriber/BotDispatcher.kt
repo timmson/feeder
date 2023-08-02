@@ -27,22 +27,30 @@ class BotDispatcher(
                     update.message().text().let {
                         when {
                             it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
-                            it.startsWith("/w") -> feederFacade.sendMeaningAndTranslation(chantId.toString(), it.replace("/w", "").trim())
+                            it.startsWith("/w") -> feederFacade.sendMeaningAndTranslation(
+                                chantId.toString(),
+                                it.replace("/w", "").trim()
+                            )
                         }
                     }
                 }
 
                 update.message().document() != null -> {
-                    update.message().let {
-                        feederFacade.registerCV(
-                            RegisterCVRequest(
-                                chantId.toString(),
-                                it.forwardFromMessageId(),
-                                it.forwardDate(),
-                                it.caption(),
-                                it.document().fileName()
+
+                    try {
+                        update.message().let {
+                            feederFacade.registerCV(
+                                RegisterCVRequest(
+                                    chantId.toString(),
+                                    it.forwardFromMessageId(),
+                                    it.forwardDate(),
+                                    it.caption(),
+                                    it.document().fileName()
+                                )
                             )
-                        )
+                        }
+                    } catch (e: Exception) {
+                        botService.sendMessage(chantId, "This document has incorrect fields: ${e.message}")
                     }
                 }
 

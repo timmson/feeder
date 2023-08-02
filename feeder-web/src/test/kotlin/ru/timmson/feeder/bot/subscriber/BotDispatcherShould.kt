@@ -1,18 +1,17 @@
 package ru.timmson.feeder.bot.subscriber
 
 import com.pengrad.telegrambot.model.Chat
+import com.pengrad.telegrambot.model.Document
 import com.pengrad.telegrambot.model.Message
 import com.pengrad.telegrambot.model.Update
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
+import org.mockito.Mockito.`when`
 import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.*
 import ru.timmson.feeder.bot.BotListener
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
@@ -42,6 +41,9 @@ class BotDispatcherShould {
 
     @Spy
     private lateinit var chat: Chat
+
+    @Spy
+    private lateinit var document: Document
 
     @BeforeEach
     fun setUp() {
@@ -102,5 +104,42 @@ class BotDispatcherShould {
 
         verifyNoInteractions(botService)
         verify(feederFacade).sendMeaningAndTranslation(eq(chatId.toString()), eq(expected))
+    }
+
+    @Test
+    fun receiveCV() {
+        val chatId = 1L
+        val messageId = 1
+        val forwardDate = 1000
+        val caption = "some text"
+        val fileName = "file name"
+
+        feederConfig.ownerId = chatId.toString()
+        doReturn(document).`when`(message).document()
+        `when`(message.forwardFromMessageId()).thenReturn(messageId)
+        `when`(message.forwardDate()).thenReturn(forwardDate)
+        `when`(message.caption()).thenReturn(caption)
+        `when`(document.fileName()).thenReturn(fileName)
+        doReturn(chatId).`when`(chat).id()
+
+        botDispatcher.receiveUpdate(update)
+
+        verify(feederFacade).registerCV(any())
+        verifyNoInteractions(botService)
+    }
+
+    @Test
+    fun receiveIncorrectCV() {
+        val expected = "This document has incorrect fields: forwardFromMessageId(...) must not be null"
+        val chatId = 1L
+
+        feederConfig.ownerId = chatId.toString()
+        doReturn(document).`when`(message).document()
+        doReturn(chatId).`when`(chat).id()
+
+        botDispatcher.receiveUpdate(update)
+
+        verifyNoInteractions(feederFacade)
+        verify(botService).sendMessage(eq(chatId), eq(expected))
     }
 }
