@@ -3,7 +3,6 @@ package ru.timmson.feeder.service
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.bot.model.request.SendMessage
-import ru.timmson.feeder.common.Date
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.cv.AirtableAPIClient
@@ -75,9 +74,8 @@ class FeederFacade(
     fun registerCV(cvRequest: RegisterCVRequest) {
         log.info("Entering registerCV([${cvRequest.fileName}]) ...")
 
-        val date = Date.format(cvRequest.forwardedMessagedTimeStamp.toLong())
         val cv = cvRegistrar.parse(CVRegisterRequest(caption = cvRequest.caption, fileName = cvRequest.fileName))
-        val text = printService.printCV(cv, date)
+        val text = printService.printCV(cv, cvRequest.forwardedMessagedDate)
         val url = "${feederConfig.cvChannelUrl}${cvRequest.forwardedMessageId}"
 
         val record =
@@ -87,7 +85,7 @@ class FeederFacade(
                     area = cv.area,
                     title = cv.title,
                     type = cv.type,
-                    date = date,
+                    date = cvRequest.forwardedMessagedDate,
                     url = url
                 )
             )
