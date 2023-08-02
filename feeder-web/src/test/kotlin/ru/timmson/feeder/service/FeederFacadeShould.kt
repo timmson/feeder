@@ -109,7 +109,7 @@ class FeederFacadeShould {
     fun registerCV() {
         val chatId = "1"
         val messageId = 2
-        val messageTimestamp = 1231313
+        val messageTimestamp = "date"
         val caption = "caption"
         val fileName = "fileName"
         val request = CVRegisterRequest(caption = caption, fileName = fileName)

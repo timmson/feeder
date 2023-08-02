@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.bot.BotListener
 import ru.timmson.feeder.bot.BotService
+import ru.timmson.feeder.common.Date
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.service.FeederFacade
 import ru.timmson.feeder.service.RegisterCVRequest
@@ -17,47 +18,44 @@ class BotDispatcher(
 ) : AbstractBotSubscriber(botListener) {
 
     override fun receiveUpdate(update: Update) {
-        val chantId = update.message().chat().id()
+        val chatId = update.message().chat().id()
 
-        if (chantId != feederConfig.ownerId.toLong()) {
-            botService.sendMessage(chantId, "Sorry :(")
-        } else {
+        when {
+            feederConfig.ownerId.toLong() != chatId -> botService.sendMessage(chatId, "Sorry :(")
+            update.message().text() != null -> onMessage(update)
+            update.message().document() != null -> onDocument(update)
+            else -> botService.sendMessage(chatId, "This message does not contain any of known formats ;(")
+        }
+    }
+
+    private fun onMessage(update: Update) {
+        val chatId = update.message().chat().id()
+
+        update.message().text().let {
             when {
-                update.message().text() != null -> {
-                    update.message().text().let {
-                        when {
-                            it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
-                            it.startsWith("/w") -> feederFacade.sendMeaningAndTranslation(
-                                chantId.toString(),
-                                it.replace("/w", "").trim()
-                            )
-                        }
-                    }
-                }
-
-                update.message().document() != null -> {
-
-                    try {
-                        update.message().let {
-                            feederFacade.registerCV(
-                                RegisterCVRequest(
-                                    chantId.toString(),
-                                    it.forwardFromMessageId(),
-                                    it.forwardDate(),
-                                    it.caption(),
-                                    it.document().fileName()
-                                )
-                            )
-                        }
-                    } catch (e: Exception) {
-                        botService.sendMessage(chantId, "This document has incorrect fields: ${e.message}")
-                    }
-                }
-
-                else -> {
-                    botService.sendMessage(chantId, "This message does not contain any of known formats ;(")
-                }
+                it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
+                it.startsWith("/w") -> feederFacade.sendMeaningAndTranslation(chatId.toString(), it.replace("/w", "").trim())
             }
+        }
+    }
+
+    private fun onDocument(update: Update) {
+        val chatId = update.message().chat().id()
+
+        try {
+            update.message().let {
+                feederFacade.registerCV(
+                    RegisterCVRequest(
+                        chatId.toString(),
+                        it.forwardFromMessageId() ?: 0,
+                        if (it.forwardDate() != null) Date.format(it.forwardDate().toLong()) else Date.today,
+                        it.caption(),
+                        it.document().fileName()
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            botService.sendMessage(chatId, "This document has an incorrect fields: ${e.message}")
         }
     }
 }

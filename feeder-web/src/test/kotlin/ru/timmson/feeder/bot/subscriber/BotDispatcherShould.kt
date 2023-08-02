@@ -130,7 +130,7 @@ class BotDispatcherShould {
 
     @Test
     fun receiveIncorrectCV() {
-        val expected = "This document has incorrect fields: forwardFromMessageId(...) must not be null"
+        val expected = "This document has an incorrect fields: caption(...) must not be null"
         val chatId = 1L
 
         feederConfig.ownerId = chatId.toString()

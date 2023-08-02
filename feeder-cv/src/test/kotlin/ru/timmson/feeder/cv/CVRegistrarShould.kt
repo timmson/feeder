@@ -18,7 +18,7 @@ class CVRegistrarShould {
     }
 
     @Test
-    fun save() {
+    fun parse() {
         val expectedCV = CV().apply {
             name = "Иванов"
             area = "Омск"
@@ -36,5 +36,32 @@ class CVRegistrarShould {
         val actualCV = cvRegistrar.parse(request)
 
         assertEquals(expectedCV, actualCV)
+    }
+
+    @Test
+    fun parseFileNameWithSpaces() {
+        val expected = "Иванов"
+
+        val actualCV = cvRegistrar.parseFileName("Иванов Иван SDET.docx")
+
+        assertEquals(expected, actualCV)
+    }
+
+    @Test
+    fun parseFileNameWithUnderscores1() {
+        val expected = "Сидоров"
+
+        val actualCV = cvRegistrar.parseFileName("Разработчик_Mobile_Сидоров_Алексей.docx")
+
+        assertEquals(expected, actualCV)
+    }
+
+    @Test
+    fun parseFileNameWithUnderscores2() {
+        val expected = "Бурковский"
+
+        val actualCV = cvRegistrar.parseFileName("_NET_бэкенд_разработчик_Бурковский_Антон_м.docx")
+
+        assertEquals(expected, actualCV)
     }
 }
