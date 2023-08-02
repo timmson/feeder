@@ -25,7 +25,8 @@ class AirtableAPIClientShould {
                     area = "area",
                     title = "title",
                     type = "type",
-                    date = "date"
+                    date = "date",
+                    url = "url"
                 )
             )
 
@@ -57,7 +58,8 @@ class AirtableAPIClientShould {
                     area = "area",
                     title = "title",
                     type = "type",
-                    date = "date"
+                    date = "date",
+                    url = "url"
                 )
             )
 

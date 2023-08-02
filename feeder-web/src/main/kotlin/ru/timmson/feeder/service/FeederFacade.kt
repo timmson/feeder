@@ -13,7 +13,6 @@ import ru.timmson.feeder.cv.model.Fields
 import ru.timmson.feeder.cv.model.Record
 import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.stock.service.StockService
-import java.util.concurrent.atomic.AtomicInteger
 
 @Service
 class FeederFacade(
@@ -27,8 +26,6 @@ class FeederFacade(
 ) {
 
     private val log = logger<FeederFacade>()
-
-    private val counter = AtomicInteger()
 
     private val stocks = mapOf(
         "usd" to "💰",
@@ -81,6 +78,7 @@ class FeederFacade(
         val date = Date.format(cvRequest.forwardedMessagedTimeStamp.toLong())
         val cv = cvRegistrar.parse(CVRegisterRequest(caption = cvRequest.caption, fileName = cvRequest.fileName))
         val text = printService.printCV(cv, date)
+        val url = "${feederConfig.cvChannelUrl}${cvRequest.forwardedMessageId}"
 
         val record =
             Record(
@@ -90,7 +88,7 @@ class FeederFacade(
                     title = cv.title,
                     type = cv.type,
                     date = date,
-                    sort = counter.incrementAndGet()
+                    url = url
                 )
             )
         val code = airtableAPIClient.add(record)
@@ -100,8 +98,8 @@ class FeederFacade(
                 cvRequest.chatId,
                 listOf(
                     "<code>$text</code>",
-                    "<code>${feederConfig.cvChannelUrl}${cvRequest.forwardedMessageId}</code>",
-                    "<code>${code}</code>"
+                    "<code>$url</code>",
+                    "<code>$code</code>"
                 ).joinToString("\n\n"),
                 true
             )
