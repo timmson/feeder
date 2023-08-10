@@ -64,4 +64,13 @@ class CVRegistrarShould {
 
         assertEquals(expected, actualCV)
     }
+
+    @Test
+    fun parseFileNameWithUnderscores3() {
+        val expected = "Шишкин"
+
+        val actualCV = cvRegistrar.parseFileName("Системный_аналитик_Шишкин_Василий.docx")
+
+        assertEquals(expected, actualCV)
+    }
 }
