@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service
 @Service
 class CVRegistrar {
 
-    private val missedKeywords = listOf("разработчик", "mobile", "net", "бэкенд", "системный", "аналитик")
+    private val missedKeywords = listOf(
+        "разработчик", "mobile", "net",
+        "бэкенд", "системный", "аналитик",
+        "системный", "android"
+    )
 
     fun parse(request: CVRegisterRequest): CV =
         request.caption.lines().let {

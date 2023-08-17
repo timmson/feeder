@@ -4,7 +4,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.*
+import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.junit.jupiter.MockitoExtension
+import java.util.stream.Stream
 
 
 @ExtendWith(MockitoExtension::class)
@@ -38,39 +43,25 @@ class CVRegistrarShould {
         assertEquals(expectedCV, actualCV)
     }
 
-    @Test
-    fun parseFileNameWithSpaces() {
-        val expected = "Иванов"
-
-        val actualCV = cvRegistrar.parseFileName("Иванов Иван SDET.docx")
-
-        assertEquals(expected, actualCV)
-    }
-
-    @Test
-    fun parseFileNameWithUnderscores1() {
-        val expected = "Сидоров"
-
-        val actualCV = cvRegistrar.parseFileName("Разработчик_Mobile_Сидоров_Алексей.docx")
+    @ParameterizedTest
+    @MethodSource("data")
+    fun parseFileNameWithUnderscores(arrange: String, expected: String) {
+        val actualCV = cvRegistrar.parseFileName(arrange)
 
         assertEquals(expected, actualCV)
     }
 
-    @Test
-    fun parseFileNameWithUnderscores2() {
-        val expected = "Бурковский"
-
-        val actualCV = cvRegistrar.parseFileName("_NET_бэкенд_разработчик_Бурковский_Антон_м.docx")
-
-        assertEquals(expected, actualCV)
+    companion object {
+        @JvmStatic
+        fun data(): Stream<Arguments> = Stream.of(
+            of("Иванов Иван SDET.docx", "Иванов"),
+            of("Разработчик_Mobile_Сидоров_Алексей.docx", "Сидоров"),
+            of("_NET_бэкенд_разработчик_Бурковский_Антон_м.docx", "Бурковский"),
+            of("Системный_аналитик_Шишкин_Василий.docx", "Шишкин"),
+            of("Системный_аналитик_Сидоров_Иван.docx", "Сидоров"),
+            of("Android_разработчик_Сидоров_Иван", "Сидоров")
+        )
     }
 
-    @Test
-    fun parseFileNameWithUnderscores3() {
-        val expected = "Шишкин"
 
-        val actualCV = cvRegistrar.parseFileName("Системный_аналитик_Шишкин_Василий.docx")
-
-        assertEquals(expected, actualCV)
-    }
 }
