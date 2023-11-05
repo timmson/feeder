@@ -15,6 +15,7 @@ class PrintServiceShould {
             name = "Иванов"
             area = "Омск"
             title = "SDET"
+            type = "Внешний"
         }, "25.12.2012")
 
         Assertions.assertEquals(expected, actual)

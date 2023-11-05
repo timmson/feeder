@@ -74,9 +74,16 @@ class FeederFacade(
     fun registerCV(cvRequest: RegisterCVRequest) {
         log.info("Entering registerCV([${cvRequest.fileName}]) ...")
 
-        val cv = cvRegistrar.parse(CVRegisterRequest(caption = cvRequest.caption, fileName = cvRequest.fileName))
+        val cv = cvRegistrar.parse(
+            CVRegisterRequest(
+                forwardedChatId = cvRequest.forwardedChatId,
+                forwardedMessageId = cvRequest.forwardedMessageId,
+                caption = cvRequest.caption,
+                fileName = cvRequest.fileName
+            )
+        )
+
         val text = printService.printCV(cv, cvRequest.forwardedMessagedDate)
-        val url = "${feederConfig.cvChannelUrl}${cvRequest.forwardedMessageId}"
 
         val record =
             Record(
@@ -86,7 +93,7 @@ class FeederFacade(
                     title = cv.title,
                     type = cv.type,
                     date = cvRequest.forwardedMessagedDate,
-                    url = url
+                    url = cv.url
                 )
             )
         val code = airtableAPIClient.add(record)
@@ -96,7 +103,7 @@ class FeederFacade(
                 cvRequest.chatId,
                 listOf(
                     "<code>$text</code>",
-                    "<code>$url</code>",
+                    "<code>${cv.url}</code>",
                     "<code>$code</code>"
                 ).joinToString("\n\n"),
                 true
