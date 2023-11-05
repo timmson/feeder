@@ -107,20 +107,22 @@ class FeederFacadeShould {
 
     @Test
     fun registerCV() {
-        val chatId = "1"
-        val messageId = 2
+        val chatId = 1L
+        val forwardedChatId = 2L
+        val messageId = 3
         val messageTimestamp = "date"
         val caption = "caption"
         val fileName = "fileName"
-        val request = CVRegisterRequest(caption = caption, fileName = fileName)
+        val request = CVRegisterRequest(forwardedChatId = forwardedChatId, forwardedMessageId = messageId, caption = caption, fileName = fileName)
         val cv = CV()
-        val cvRequest = RegisterCVRequest(chatId, messageId, messageTimestamp, caption, fileName)
+        val cvRequest = RegisterCVRequest(chatId, forwardedChatId, messageId, messageTimestamp, caption, fileName)
 
         `when`(cvRegistrar.parse(eq(request))).thenReturn(cv)
         `when`(printService.printCV(eq(cv), any())).thenReturn("")
         feederFacade.registerCV(cvRequest)
 
         verify(botService, times(1)).sendMessage(any())
+        verify(airtableAPIClient, times(1)).add(any())
     }
 
 

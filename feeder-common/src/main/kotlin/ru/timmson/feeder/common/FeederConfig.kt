@@ -30,6 +30,12 @@ class FeederConfig {
     @Value("\${feeder.cv.channelUrl}")
     var cvChannelUrl: String = ""
 
+    @Value("\${feeder.cv.innerChannelId}")
+    var cvInnerChannelId: Long = 0
+
+    @Value("\${feeder.cv.innerChannelRegion}")
+    var cvInnerChannelRegion: String = ""
+
     @Value("\${feeder.cv.airtableUrl}")
     var airtableUrl: String = ""
 

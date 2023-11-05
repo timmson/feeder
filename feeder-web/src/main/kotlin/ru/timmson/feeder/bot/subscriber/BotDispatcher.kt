@@ -46,7 +46,8 @@ class BotDispatcher(
             update.message().let {
                 feederFacade.registerCV(
                     RegisterCVRequest(
-                        chatId.toString(),
+                        chatId,
+                        if (it.forwardFromChat() != null && it.forwardFromChat().id() != null) it.forwardFromChat().id() else 0,
                         it.forwardFromMessageId() ?: 0,
                         if (it.forwardDate() != null) Date.format(it.forwardDate().toLong()) else Date.today,
                         it.caption(),

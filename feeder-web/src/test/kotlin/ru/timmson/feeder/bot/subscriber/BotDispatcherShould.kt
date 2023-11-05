@@ -43,6 +43,9 @@ class BotDispatcherShould {
     private lateinit var chat: Chat
 
     @Spy
+    private lateinit var forwardedChat: Chat
+
+    @Spy
     private lateinit var document: Document
 
     @BeforeEach
@@ -110,12 +113,15 @@ class BotDispatcherShould {
     fun receiveCV() {
         val chatId = 1L
         val messageId = 1
+        val forwardChatId = -1000000000333L
         val forwardDate = 1000
         val caption = "some text"
         val fileName = "file name"
 
         feederConfig.ownerId = chatId.toString()
         doReturn(document).`when`(message).document()
+        doReturn(forwardedChat).`when`(message).forwardFromChat()
+        doReturn(forwardChatId).`when`(forwardedChat).id()
         `when`(message.forwardFromMessageId()).thenReturn(messageId)
         `when`(message.forwardDate()).thenReturn(forwardDate)
         `when`(message.caption()).thenReturn(caption)

@@ -1,8 +1,9 @@
 package ru.timmson.feeder.cv
 
 class CV {
+    var url: String = ""
     var name: String = ""
-    val type: String = "Внешний"
+    var type: String = ""
     var title: String = ""
     var area: String = ""
 
@@ -21,7 +22,8 @@ class CV {
     }
 
     override fun hashCode(): Int {
-        var result = name.hashCode()
+        var result = url.hashCode()
+        result = 31 * result + name.hashCode()
         result = 31 * result + type.hashCode()
         result = 31 * result + title.hashCode()
         result = 31 * result + area.hashCode()
@@ -29,6 +31,6 @@ class CV {
     }
 
     override fun toString(): String {
-        return "CV(name='$name', type='$type', title='$title', area='$area')"
+        return "CV(url='$url', name='$name', type='$type', title='$title', area='$area')"
     }
 }
