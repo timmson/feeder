@@ -9,10 +9,10 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service
-class MoscowExchangeDAO(
+open class MoscowExchangeDAO(
     private val requester: Requester,
     private val objectMapper: ObjectMapper
-) : StockDAO {
+) : CachedStockDAO() {
 
     private val stockConfigs = mapOf(
         "usd" to StockConfig(

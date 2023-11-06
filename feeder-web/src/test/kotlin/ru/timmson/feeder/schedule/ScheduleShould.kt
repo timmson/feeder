@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
+import org.springframework.cache.CacheManager
 import ru.timmson.feeder.calendar.ProdCal
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.service.FeederFacade
@@ -26,11 +27,14 @@ class ScheduleShould {
     @Mock
     private lateinit var feederFacade: FeederFacade
 
+    @Mock
+    private lateinit var cacheManager: CacheManager
+
     @BeforeEach
     fun setUp() {
         feederConfig = FeederConfig()
 
-        schedule = Schedule(feederConfig, prodCal, feederFacade)
+        schedule = Schedule(feederConfig, prodCal, feederFacade, cacheManager)
         schedule.init()
     }
 
