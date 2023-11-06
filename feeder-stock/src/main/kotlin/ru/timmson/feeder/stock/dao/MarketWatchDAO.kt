@@ -7,7 +7,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service
-class MarketWatchDAO(private val requester: Requester) : StockDAO {
+open class MarketWatchDAO(private val requester: Requester) : CachedStockDAO() {
 
     override fun getStockByTicker(ticker: String): Stock {
         try {

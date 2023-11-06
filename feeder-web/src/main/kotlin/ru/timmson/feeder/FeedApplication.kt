@@ -3,9 +3,11 @@ package ru.timmson.feeder
 import jakarta.annotation.PostConstruct
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.cache.annotation.EnableCaching
 import org.springframework.scheduling.annotation.EnableScheduling
 import ru.timmson.feeder.common.logger
 
+@EnableCaching
 @EnableScheduling
 @SpringBootApplication
 open class FeedApplication(

@@ -15,6 +15,9 @@ class FeederConfig {
     @Value("\${feeder.stock.schedule}")
     var scheduleStock: String = ""
 
+    @Value("\${feeder.stock.cacheTTL}")
+    var scheduleCacheTTL: String = ""
+
     @Value("\${feeder.stock.timeout}")
     var timeoutInMillis: Long = 0
 
