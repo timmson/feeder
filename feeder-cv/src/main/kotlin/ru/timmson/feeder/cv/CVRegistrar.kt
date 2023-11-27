@@ -2,6 +2,7 @@ package ru.timmson.feeder.cv
 
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.common.FeederConfig
+import ru.timmson.feeder.cv.model.CVRegisterRequest
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
@@ -13,7 +14,7 @@ class CVRegistrar(
     private val missedKeywords = listOf(
         "разработчик", "mobile", "net",
         "бэкенд", "системный", "аналитик",
-        "системный", "android"
+        "системный", "android", "cv"
     )
 
     fun parse(request: CVRegisterRequest): CV =

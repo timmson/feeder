@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.Arguments.of
 import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.junit.jupiter.MockitoExtension
 import ru.timmson.feeder.common.FeederConfig
+import ru.timmson.feeder.cv.model.CVRegisterRequest
 import java.util.stream.Stream
 
 
@@ -84,6 +85,7 @@ class CVRegistrarShould {
     companion object {
         @JvmStatic
         fun data(): Stream<Arguments> = Stream.of(
+            of("CV_Иванов SDET.docx", "Иванов"),
             of("Иванов Иван SDET.docx", "Иванов"),
             of("Разработчик_Mobile_Сидоров_Алексей.docx", "Сидоров"),
             of("_NET_бэкенд_разработчик_Бурковский_Антон_м.docx", "Бурковский"),

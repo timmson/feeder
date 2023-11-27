@@ -14,8 +14,8 @@ import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.cv.AirtableAPIClient
 import ru.timmson.feeder.cv.CV
-import ru.timmson.feeder.cv.CVRegisterRequest
 import ru.timmson.feeder.cv.CVRegistrar
+import ru.timmson.feeder.cv.model.CVRegisterRequest
 import ru.timmson.feeder.lingua.LinguaService
 import ru.timmson.feeder.lingua.oxford.model.Meaning
 import ru.timmson.feeder.lingua.oxford.model.OxfordDictionaryExplainResponse

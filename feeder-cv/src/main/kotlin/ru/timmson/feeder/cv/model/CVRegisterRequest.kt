@@ -1,4 +1,4 @@
-package ru.timmson.feeder.cv
+package ru.timmson.feeder.cv.model
 
 data class CVRegisterRequest(
     val forwardedChatId: Long,

@@ -6,8 +6,8 @@ import ru.timmson.feeder.bot.model.request.SendMessage
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.cv.AirtableAPIClient
-import ru.timmson.feeder.cv.CVRegisterRequest
 import ru.timmson.feeder.cv.CVRegistrar
+import ru.timmson.feeder.cv.model.CVRegisterRequest
 import ru.timmson.feeder.cv.model.Fields
 import ru.timmson.feeder.cv.model.Record
 import ru.timmson.feeder.lingua.LinguaService
