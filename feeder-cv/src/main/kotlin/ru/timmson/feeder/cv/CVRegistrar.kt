@@ -14,7 +14,7 @@ class CVRegistrar(
     private val missedKeywords = listOf(
         "разработчик", "mobile", "net",
         "бэкенд", "системный", "аналитик",
-        "системный", "android", "cv"
+        "системный", "android", "cv", "developer"
     )
 
     fun parse(request: CVRegisterRequest): CV =
