@@ -31,6 +31,6 @@ class CVRegistrar(
 
 
     internal fun parseFileName(fileName: String) =
-        fileName.split(" ", "_", ".").first { it.isNotBlank() && !missedKeywords.contains(it.lowercase()) }
+        fileName.split(" ", "_", ".", "-").first { it.isNotBlank() && !missedKeywords.contains(it.lowercase()) }
 
 }

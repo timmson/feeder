@@ -92,7 +92,8 @@ class CVRegistrarShould {
             of("Системный_аналитик_Шишкин_Василий.docx", "Шишкин"),
             of("Системный_аналитик_Сидоров_Иван.docx", "Сидоров"),
             of("Android_разработчик_Сидоров_Иван", "Сидоров"),
-            of("NET developer_Карпушкин Антон", "Карпушкин")
+            of("NET developer_Карпушкин Антон", "Карпушкин"),
+            of("Vladislav-Mayorov-getmatch.pdf", "Vladislav")
         )
     }
 
