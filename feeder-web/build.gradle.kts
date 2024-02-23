@@ -7,7 +7,6 @@ dependencies {
     implementation(project(":feeder-calendar"))
     implementation(project(":feeder-common"))
     implementation(project(":feeder-cv"))
-    implementation(project(":feeder-lingua"))
     implementation(project(":feeder-stock"))
 
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")

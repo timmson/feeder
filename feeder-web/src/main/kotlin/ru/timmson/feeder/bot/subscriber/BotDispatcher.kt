@@ -34,7 +34,6 @@ class BotDispatcher(
         update.message().text().let {
             when {
                 it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
-                it.startsWith("/w") -> feederFacade.sendMeaningAndTranslation(chatId.toString(), it.replace("/w", "").trim())
             }
         }
     }

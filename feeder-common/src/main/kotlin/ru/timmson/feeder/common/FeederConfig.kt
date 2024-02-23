@@ -24,12 +24,6 @@ class FeederConfig {
     @Value("\${feeder.stock.channelId}")
     var stockChannelId: String = ""
 
-    @Value("\${feeder.lingua.oxfordDictionaryUrl}")
-    var oxfordDictionaryUrl: String = ""
-
-    @Value("\${feeder.lingua.linguaLeoUrl}")
-    var linguaLeoUrl: String = ""
-
     @Value("\${feeder.cv.channelUrl}")
     var cvChannelUrl: String = ""
 
@@ -44,4 +38,12 @@ class FeederConfig {
 
     @Value("\${feeder.cv.airtableToken}")
     var airtableToken: String = ""
+
+    @Value("\${feeder.cv.spreadSheetId}")
+    var spreadSheetId: String = ""
+
+    @Value("\${feeder.cv.spreadSheetSecretFile}")
+    var spreadSheetSecretFile: String = ""
+
+    val applicationName = "feeder"
 }

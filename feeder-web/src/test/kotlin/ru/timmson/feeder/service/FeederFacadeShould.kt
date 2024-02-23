@@ -12,15 +12,10 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import ru.timmson.feeder.bot.BotService
 import ru.timmson.feeder.common.FeederConfig
-import ru.timmson.feeder.cv.AirtableAPIClient
 import ru.timmson.feeder.cv.CV
 import ru.timmson.feeder.cv.CVRegistrar
+import ru.timmson.feeder.cv.CVStore
 import ru.timmson.feeder.cv.model.CVRegisterRequest
-import ru.timmson.feeder.lingua.LinguaService
-import ru.timmson.feeder.lingua.oxford.model.Meaning
-import ru.timmson.feeder.lingua.oxford.model.OxfordDictionaryExplainResponse
-import ru.timmson.feeder.lingua.translate.model.LinguaLeoTranslation
-import ru.timmson.feeder.lingua.translate.model.LinguaLeoTranslationResponse
 import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.service.StockService
 import java.math.BigDecimal
@@ -36,16 +31,10 @@ class FeederFacadeShould {
     private lateinit var stockService: StockService
 
     @Mock
-    private lateinit var linguaService: LinguaService
-
-    @Mock
     private lateinit var cvRegistrar: CVRegistrar
 
     @Mock
-    private lateinit var printService: PrintService
-
-    @Mock
-    private lateinit var airtableAPIClient: AirtableAPIClient
+    private lateinit var cvStore: CVStore
 
     @Mock
     private lateinit var botService: BotService
@@ -53,7 +42,7 @@ class FeederFacadeShould {
     @BeforeEach
     fun setUp() {
         feederConfig = FeederConfig()
-        feederFacade = FeederFacade(feederConfig, stockService, linguaService, cvRegistrar, printService, airtableAPIClient, botService)
+        feederFacade = FeederFacade(feederConfig, stockService, cvRegistrar, cvStore, botService)
     }
 
     @Test
@@ -84,28 +73,6 @@ class FeederFacadeShould {
     }
 
     @Test
-    fun sendMeaning() {
-        val chatId = "1"
-        val word = "some word"
-        val translation = "some translation"
-        val explanation = "some meaning"
-        val linguaLeoTranslationResponse = LinguaLeoTranslationResponse().apply {
-            url = ""
-            translate = listOf(LinguaLeoTranslation().apply {
-                value = translation
-            })
-        }
-        val oxfordDictionaryExplainResponse = OxfordDictionaryExplainResponse(url = "", meanings = listOf(Meaning(explanation)))
-
-        `when`(linguaService.explain(eq(word))).thenReturn(oxfordDictionaryExplainResponse)
-        `when`(linguaService.translate(eq(word))).thenReturn(linguaLeoTranslationResponse)
-
-        feederFacade.sendMeaningAndTranslation(chatId, word)
-
-        verify(botService, times(2)).sendMessage(eq(chatId), any())
-    }
-
-    @Test
     fun registerCV() {
         val chatId = 1L
         val forwardedChatId = 2L
@@ -118,11 +85,10 @@ class FeederFacadeShould {
         val cvRequest = RegisterCVRequest(chatId, forwardedChatId, messageId, messageTimestamp, caption, fileName)
 
         `when`(cvRegistrar.parse(eq(request))).thenReturn(cv)
-        `when`(printService.printCV(eq(cv), any())).thenReturn("")
         feederFacade.registerCV(cvRequest)
 
         verify(botService, times(1)).sendMessage(any())
-        verify(airtableAPIClient, times(1)).add(any())
+        verify(cvStore, times(1)).add(any())
     }
 
 

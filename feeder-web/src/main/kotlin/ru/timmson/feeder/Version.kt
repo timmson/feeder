@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service
 
 @Service
 data class Version(
-    val number: String = "28",
-    val feature: String = "Add - delimiter"
+    val number: String = "30",
+    val feature: String = "Add insertion into sheets directly"
 ) {
 
     override fun toString(): String {
