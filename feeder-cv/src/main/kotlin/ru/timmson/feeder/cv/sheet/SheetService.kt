@@ -21,7 +21,7 @@ class SheetService(
                 spreadsheet.sheets.firstOrNull { it.properties.title.equals(fields.title, true) }
                     ?: throw Exception("sheet(${fields.title}) is not found. Possible names are [$names]")
 
-            val request = SheetUpdater(sheet.properties.sheetId, fields).batchUpdateSpreadsheetRequest
+            val request = SheetRowInserter(sheet.properties.sheetId, 3, fields).batchUpdateSpreadsheetRequest
             val response = sheetAPI.batchUpdate(request)
 
             log.info("Leaving SheetService add(...) = $response")
