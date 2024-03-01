@@ -66,7 +66,6 @@ class SheetRowInserter(
             startRowIndex = rowIdNumber
             startColumnIndex = 0
             endRowIndex = rowIdNumber + 1
-            endColumnIndex = 10
         },
         Color().apply {
             red = 1.0F
