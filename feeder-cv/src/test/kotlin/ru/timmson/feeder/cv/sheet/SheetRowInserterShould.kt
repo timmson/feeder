@@ -81,7 +81,6 @@ class SheetRowInserterShould() {
             startRowIndex = rowIdNumber
             startColumnIndex = 0
             endRowIndex = rowIdNumber + 1
-            endColumnIndex = 10
         }
 
         val updaterRequest = sheetRowInserter.fillRowByWhite().updateCells
