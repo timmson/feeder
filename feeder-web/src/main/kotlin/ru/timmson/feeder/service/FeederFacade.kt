@@ -10,6 +10,7 @@ import ru.timmson.feeder.cv.CVStore
 import ru.timmson.feeder.cv.model.CVRegisterRequest
 import ru.timmson.feeder.cv.model.Fields
 import ru.timmson.feeder.stock.service.IndicatorService
+import java.math.BigDecimal
 
 @Service
 class FeederFacade(
@@ -25,11 +26,11 @@ class FeederFacade(
     private val stocks = mapOf(
         "usd" to "💰 Курс USD, руб.: ",
         "imoex" to "🇷🇺 Индекс Мосбиржи: ",
-        "mredc" to "🏡 Индекс московской недвижимости ДомКлик: ",
         "spx" to "🇺🇸 S&P 500 Index: ",
         "shcomp" to "🇨🇳 Shanghai Composite Index: ",
         "keyRate" to "\uD83D\uDDDD Ключевая ставка, %: ",
-        "inflation" to "\uD83C\uDF88 Официальная инфляция, %: "
+        "inflation" to "\uD83C\uDF88 Официальная инфляция, %: ",
+        "mredc" to "🏡 Индекс московской недвижимости ДомКлик: "
     )
 
     fun sendStocksToOwner() =
@@ -42,7 +43,7 @@ class FeederFacade(
     private fun sendStocks(send: (String) -> Unit) {
         log.info("Entering sendStocks() ...")
 
-        val message = indicatorService.findAll().joinToString("\n") {
+        val message = indicatorService.findAll().filter { it.price != BigDecimal.ZERO }.joinToString("\n") {
             stocks.getOrDefault(it.name, "") + it.price
         }
 
