@@ -3,6 +3,7 @@ package ru.timmson.feeder.stock.dao
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -27,7 +28,7 @@ class CentralBankDAOShould {
     }
 
     @Test
-    fun getMainInfo() {
+    fun getMainInfoSuccessfully() {
         val expected = MainInfo(
             keyRate = BigDecimal(16).setScale(2, RoundingMode.HALF_UP),
             inflation = BigDecimal(7.69).setScale(2, RoundingMode.HALF_UP)
@@ -54,5 +55,13 @@ class CentralBankDAOShould {
         val actual = centralBankDAO.getMainInfo()
 
         assertEquals(expected, actual)
+    }
+
+    @Test
+
+    fun getMainInfoWithException() {
+        `when`(requester.postSOAP(eq("https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"), eq("http://web.cbr.ru/MainInfoXML"), any())).thenReturn("")
+
+        assertThrows<StockDAOException> { centralBankDAO.getMainInfo() }
     }
 }
