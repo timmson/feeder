@@ -39,7 +39,7 @@ open class Schedule(
     //@CacheEvict("tickers")
     @Scheduled(fixedRateString = "#{@feederConfig.scheduleCacheTTL}")
     open fun clearCache() {
-        cacheManager.getCache("tickers")?.clear()
+        cacheManager.cacheNames.forEach { cacheManager.getCache(it)?.clear() }
         log.info("Clear cached tickers")
     }
 

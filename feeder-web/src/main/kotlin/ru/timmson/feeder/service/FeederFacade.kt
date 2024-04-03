@@ -9,12 +9,12 @@ import ru.timmson.feeder.cv.CVRegistrar
 import ru.timmson.feeder.cv.CVStore
 import ru.timmson.feeder.cv.model.CVRegisterRequest
 import ru.timmson.feeder.cv.model.Fields
-import ru.timmson.feeder.stock.service.StockService
+import ru.timmson.feeder.stock.service.IndicatorService
 
 @Service
 class FeederFacade(
     private val feederConfig: FeederConfig,
-    private val stockService: StockService,
+    private val indicatorService: IndicatorService,
     private val cvRegistrar: CVRegistrar,
     private val cvStore: CVStore,
     private val botService: BotService
@@ -23,11 +23,13 @@ class FeederFacade(
     private val log = logger<FeederFacade>()
 
     private val stocks = mapOf(
-        "usd" to "💰",
-        "imoex" to "🇷🇺",
-        "mredc" to "🏡",
-        "spx" to "🇺🇸",
-        "shcomp" to "🇨🇳"
+        "usd" to "💰 Курс USD, руб.: ",
+        "imoex" to "🇷🇺 Индекс Мосбиржи: ",
+        "mredc" to "🏡 Индекс московской недвижимости ДомКлик: ",
+        "spx" to "🇺🇸 S&P 500 Index: ",
+        "shcomp" to "🇨🇳 Shanghai Composite Index: ",
+        "keyRate" to "\uD83D\uDDDD Ключевая ставка, %: ",
+        "inflation" to "\uD83C\uDF88 Официальная инфляция, %: "
     )
 
     fun sendStocksToOwner() =
@@ -40,8 +42,8 @@ class FeederFacade(
     private fun sendStocks(send: (String) -> Unit) {
         log.info("Entering sendStocks() ...")
 
-        val message = stockService.findAll().joinToString(", ") {
-            stocks.getOrDefault(it.ticker, "") + it.price
+        val message = indicatorService.findAll().joinToString("\n") {
+            stocks.getOrDefault(it.name, "") + it.price
         }
 
         send(message)

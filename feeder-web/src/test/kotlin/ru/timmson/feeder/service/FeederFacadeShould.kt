@@ -16,8 +16,8 @@ import ru.timmson.feeder.cv.CV
 import ru.timmson.feeder.cv.CVRegistrar
 import ru.timmson.feeder.cv.CVStore
 import ru.timmson.feeder.cv.model.CVRegisterRequest
-import ru.timmson.feeder.stock.model.Stock
-import ru.timmson.feeder.stock.service.StockService
+import ru.timmson.feeder.stock.model.Indicator
+import ru.timmson.feeder.stock.service.IndicatorService
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
@@ -28,7 +28,7 @@ class FeederFacadeShould {
     private lateinit var feederConfig: FeederConfig
 
     @Mock
-    private lateinit var stockService: StockService
+    private lateinit var indicatorService: IndicatorService
 
     @Mock
     private lateinit var cvRegistrar: CVRegistrar
@@ -42,34 +42,34 @@ class FeederFacadeShould {
     @BeforeEach
     fun setUp() {
         feederConfig = FeederConfig()
-        feederFacade = FeederFacade(feederConfig, stockService, cvRegistrar, cvStore, botService)
+        feederFacade = FeederFacade(feederConfig, indicatorService, cvRegistrar, cvStore, botService)
     }
 
     @Test
     fun sendStocksToOwner() {
-        val stocks = listOf(
-            Stock("usd", BigDecimal(10)),
-            Stock("spx", BigDecimal(20))
+        val indicators = listOf(
+            Indicator("usd", BigDecimal(10)),
+            Indicator("spx", BigDecimal(20))
         )
-        `when`(stockService.findAll()).thenReturn(stocks)
+        `when`(indicatorService.findAll()).thenReturn(indicators)
 
         feederFacade.sendStocksToOwner()
 
-        verify(botService).sendMessageToOwner(eq("💰10, 🇺🇸20"))
+        verify(botService).sendMessageToOwner(eq("💰 Курс USD, руб.: 10\n🇺🇸 S&P 500 Index: 20"))
     }
 
     @Test
     fun sendStocksToChannel() {
         feederConfig.stockChannelId = "channelId"
-        val stocks = listOf(
-            Stock("usd", BigDecimal(10)),
-            Stock("spx", BigDecimal(20))
+        val indicators = listOf(
+            Indicator("usd", BigDecimal(10)),
+            Indicator("spx", BigDecimal(20))
         )
-        `when`(stockService.findAll()).thenReturn(stocks)
+        `when`(indicatorService.findAll()).thenReturn(indicators)
 
         feederFacade.sendStocksToChannel()
 
-        verify(botService).sendMessage(eq(feederConfig.stockChannelId), eq("💰10, 🇺🇸20"))
+        verify(botService).sendMessage(eq(feederConfig.stockChannelId), eq("💰 Курс USD, руб.: 10\n🇺🇸 S&P 500 Index: 20"))
     }
 
     @Test

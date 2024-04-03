@@ -10,9 +10,9 @@ import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.model.MEMarketData
 import ru.timmson.feeder.stock.model.MEStock
-import ru.timmson.feeder.stock.model.Stock
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -37,11 +37,11 @@ class MoscowExchangeDAOShould {
 
     @Test
     fun returnUSDPrice() {
-        val expected = Stock("usd", BigDecimal(74.29).setScale(2, RoundingMode.HALF_UP))
+        val expected = Indicator("usd", BigDecimal(74.29).setScale(2, RoundingMode.HALF_UP))
         val meStock = getMeStock("LAST", "74.29")
 
         val url = "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=CETS:USD000UTSTOM"
-        `when`(requester.fetch(url)).thenReturn(response)
+        `when`(requester.get(url)).thenReturn(response)
         `when`(objectMapper.readValue(eq(response), eq(MEStock::class.java))).thenReturn(meStock)
 
         val actual = moscowExchangeDAO.getStockByTicker("usd")
@@ -51,11 +51,11 @@ class MoscowExchangeDAOShould {
 
     @Test
     fun returnMoscowIndexPrice() {
-        val expected = Stock("imoex", BigDecimal(2153.96).setScale(2, RoundingMode.HALF_UP))
+        val expected = Indicator("imoex", BigDecimal(2153.96).setScale(2, RoundingMode.HALF_UP))
         val meStock = getMeStock("LASTVALUE", "2153.96")
 
         val url = "https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX.json"
-        `when`(requester.fetch(url)).thenReturn(response)
+        `when`(requester.get(url)).thenReturn(response)
         `when`(objectMapper.readValue(eq(response), eq(MEStock::class.java))).thenReturn(meStock)
 
         val actual = moscowExchangeDAO.getStockByTicker("imoex")
@@ -65,11 +65,11 @@ class MoscowExchangeDAOShould {
 
     @Test
     fun returnMoscowRealtyIndexPrice() {
-        val expected = Stock("mredc", BigDecimal(254856))
+        val expected = Indicator("mredc", BigDecimal(254856))
         val meStock = getMeStock("LASTVALUE", "254855.55")
 
         val url = "https://iss.moex.com/iss/engines/stock/markets/index/securities/MREDC.json"
-        `when`(requester.fetch(url)).thenReturn(response)
+        `when`(requester.get(url)).thenReturn(response)
         `when`(objectMapper.readValue(eq(response), eq(MEStock::class.java))).thenReturn(meStock)
 
         val actual = moscowExchangeDAO.getStockByTicker("mredc")

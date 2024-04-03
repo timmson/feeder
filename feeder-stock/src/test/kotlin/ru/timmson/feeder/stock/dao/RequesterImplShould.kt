@@ -28,11 +28,11 @@ class RequesterImplShould {
     }
 
     @Test
-    fun fetchSuccessfulResponse() {
+    fun getSuccessfulResponse() {
         val expected = "x"
         webServer.enqueue(MockResponse().setBody(expected))
 
-        val actual = requesterImpl.fetch(url)
+        val actual = requesterImpl.get(url)
 
         assertEquals(expected, actual)
     }
@@ -41,7 +41,7 @@ class RequesterImplShould {
     fun handleTimeout() {
         webServer.enqueue(MockResponse().setBodyDelay(600, TimeUnit.MILLISECONDS).setBody("-"))
 
-        assertThrows<TimeoutException> { requesterImpl.fetch(url) }
+        assertThrows<TimeoutException> { requesterImpl.get(url) }
     }
 
     @AfterEach
