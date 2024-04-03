@@ -11,9 +11,9 @@ import ru.timmson.feeder.common.FeederConfig
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
-class RequesterImplShould {
+class RequesterShould {
 
-    private lateinit var requesterImpl: Requester
+    private lateinit var requester: Requester
 
     private lateinit var webServer: MockWebServer
 
@@ -22,17 +22,27 @@ class RequesterImplShould {
     @BeforeEach
     fun setUp() {
         val config = FeederConfig().apply { timeoutInMillis = 500 }
-        requesterImpl = Requester(config)
+        requester = Requester(config)
         webServer = MockWebServer()
         url = webServer.url("/").toString()
     }
 
     @Test
-    fun fetchSuccessfulResponse() {
+    fun getSuccessfully() {
         val expected = "x"
         webServer.enqueue(MockResponse().setBody(expected))
 
-        val actual = requesterImpl.fetch(url)
+        val actual = requester.postSOAP(url, "action", "body")
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun postSOAPSuccessfully() {
+        val expected = "x"
+        webServer.enqueue(MockResponse().setBody(expected))
+
+        val actual = requester.get(url)
 
         assertEquals(expected, actual)
     }
@@ -41,7 +51,7 @@ class RequesterImplShould {
     fun handleTimeout() {
         webServer.enqueue(MockResponse().setBodyDelay(600, TimeUnit.MILLISECONDS).setBody("-"))
 
-        assertThrows<TimeoutException> { requesterImpl.fetch(url) }
+        assertThrows<TimeoutException> { requester.get(url) }
     }
 
     @AfterEach

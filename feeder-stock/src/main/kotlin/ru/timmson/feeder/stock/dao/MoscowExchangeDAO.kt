@@ -2,8 +2,8 @@ package ru.timmson.feeder.stock.dao
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
+import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.model.MEStock
-import ru.timmson.feeder.stock.model.Stock
 import ru.timmson.feeder.stock.model.StockConfig
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -34,18 +34,18 @@ open class MoscowExchangeDAO(
         )
     )
 
-    override fun getStockByTicker(ticker: String): Stock {
+    override fun getStockByTicker(ticker: String): Indicator {
         try {
             val stockConfig = stockConfigs[ticker] ?: throw Exception("Ticker \"$ticker\" is not known")
 
-            val response = requester.fetch(stockConfig.url)
+            val response = requester.get(stockConfig.url)
             val meStock = objectMapper.readValue(response, MEStock::class.java)
 
             val index = meStock.marketdata.columns.indexOf(stockConfig.priceField)
             val price = BigDecimal(meStock.marketdata.data[0][index])
                 .setScale(stockConfig.scale, RoundingMode.HALF_UP)
 
-            return Stock(ticker.lowercase(), price)
+            return Indicator(ticker.lowercase(), price)
         } catch (e: Exception) {
             throw StockDAOException(e)
         }
