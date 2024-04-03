@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 
 @Service
 data class Version(
-    val number: String = "34",
+    val number: String = "35",
     val feature: String = "Add inflation and key rates"
 ) {
 
