@@ -55,7 +55,7 @@ class FeederFacadeShould {
 
         feederFacade.sendStocksToOwner()
 
-        verify(botService).sendMessageToOwner(eq("💰 Курс USD, руб.: 10\n🇺🇸 S&P 500 Index: 20"))
+        verify(botService).sendMessageToOwner(eq("💰 Курс USD: <b>10,00 руб.</b>\n🇺🇸 S&P 500 Index: <b>20</b>"))
     }
 
     @Test
@@ -69,7 +69,7 @@ class FeederFacadeShould {
 
         feederFacade.sendStocksToChannel()
 
-        verify(botService).sendMessage(eq(feederConfig.stockChannelId), eq("💰 Курс USD, руб.: 10\n🇺🇸 S&P 500 Index: 20"))
+        verify(botService).sendMessage(eq(feederConfig.stockChannelId), eq("💰 Курс USD: <b>10,00 руб.</b>\n🇺🇸 S&P 500 Index: <b>20</b>"))
     }
 
     @Test
@@ -87,7 +87,7 @@ class FeederFacadeShould {
         `when`(cvRegistrar.parse(eq(request))).thenReturn(cv)
         feederFacade.registerCV(cvRequest)
 
-        verify(botService, times(1)).sendMessage(any())
+        verify(botService, times(1)).sendMessage(eq(1L), eq("<code>Fields(name=, area=, title=, type=, date=date, url=)</code>"))
         verify(cvStore, times(1)).add(any())
     }
 

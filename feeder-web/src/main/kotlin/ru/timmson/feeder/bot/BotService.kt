@@ -26,11 +26,8 @@ class BotService(
         sendMessageToOwner("Version is ${version}. Started at ${LocalDateTime.now()}")
     }
 
-    fun sendMessage(chatId: Any, messageText: String) {
-        log.info("Entering sendMessage ($chatId, '$messageText') ...")
-        val response = bot.execute(SendMessage(chatId, messageText))
-        log.info("Leaving sendMessage (...) = ${response.isOk}")
-    }
+    fun sendMessage(chatId: Any, messageText: String) =
+        sendMessage(SendMessage(chatId, messageText, true))
 
     fun sendMessage(message: SendMessage) {
         log.info("Entering sendMessage (${message.chatId}, '${message.text}') ...")

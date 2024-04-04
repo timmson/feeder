@@ -2,7 +2,6 @@ package ru.timmson.feeder.service
 
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.bot.BotService
-import ru.timmson.feeder.bot.model.request.SendMessage
 import ru.timmson.feeder.common.FeederConfig
 import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.cv.CVRegistrar
@@ -24,13 +23,13 @@ class FeederFacade(
     private val log = logger<FeederFacade>()
 
     private val stocks = mapOf(
-        "usd" to "💰 Курс USD, руб.: ",
-        "imoex" to "🇷🇺 Индекс Мосбиржи: ",
-        "spx" to "🇺🇸 S&P 500 Index: ",
-        "shcomp" to "🇨🇳 Shanghai Composite Index: ",
-        "keyRate" to "\uD83D\uDDDD Ключевая ставка, %: ",
-        "inflation" to "\uD83C\uDF88 Официальная инфляция, %: ",
-        "mredc" to "🏡 Индекс московской недвижимости ДомКлик: "
+        "usd" to "💰 Курс USD: <b>%.2f руб.</b>",
+        "imoex" to "🇷🇺 Индекс Мосбиржи: <b>%.0f</b>",
+        "spx" to "🇺🇸 S&P 500 Index: <b>%.0f</b>",
+        "shcomp" to "🇨🇳 Shanghai Composite Index: <b>%.0f</b>",
+        "keyRate" to "🗝 Ключевая ставка: <b>%.2f%%</b>",
+        "inflation" to "🎈 Офиц. инфляция: <b>%.2f%%</b>",
+        "mredc" to "🏡 Индекс Мос. Недвиж. ДомКлик: <b>%.0f</b>"
     )
 
     fun sendStocksToOwner() =
@@ -44,7 +43,7 @@ class FeederFacade(
         log.info("Entering sendStocks() ...")
 
         val message = indicatorService.findAll().filter { it.price != BigDecimal.ZERO }.joinToString("\n") {
-            stocks.getOrDefault(it.name, "") + it.price
+            String.format(stocks.getOrDefault(it.name, ""), it.price)
         }
 
         send(message)
@@ -76,13 +75,7 @@ class FeederFacade(
 
         cvStore.add(fields)
 
-        botService.sendMessage(
-            SendMessage(
-                cvRequest.chatId,
-                "<code>$fields</code>",
-                true
-            )
-        )
+        botService.sendMessage(cvRequest.chatId, "<code>$fields</code>")
 
         log.info("Leaving registerCV(...) = $cv")
     }
