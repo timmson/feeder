@@ -28,7 +28,7 @@ class Requester(
             .get(feederConfig.timeoutInMillis, TimeUnit.MILLISECONDS)
             .body()
 
-        log.info("Response [$responseBody]")
+        log.fine("Response [$responseBody]")
         log.info("Leaving get(.../${url.split("/").last()}) = [length=${responseBody.length}] ")
         return responseBody
     }
