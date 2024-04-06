@@ -1,6 +1,7 @@
 package ru.timmson.feeder.bot.subscriber
 
 import com.pengrad.telegrambot.model.Update
+import com.pengrad.telegrambot.model.message.origin.MessageOriginChannel
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.bot.BotListener
 import ru.timmson.feeder.bot.BotService
@@ -29,8 +30,6 @@ class BotDispatcher(
     }
 
     private fun onMessage(update: Update) {
-        val chatId = update.message().chat().id()
-
         update.message().text().let {
             when {
                 it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
@@ -39,21 +38,21 @@ class BotDispatcher(
     }
 
     private fun onDocument(update: Update) {
-        val chatId = update.message().chat().id()
+        val message = update.message()
+        val chatId = message.chat().id()
+        val origin = message.forwardOrigin()
+
+        var forwardedChatId = 0L //if (it.forwardFromChat() != null && it.forwardFromChat().id() != null) it.forwardFromChat().id() else 0
+        var forwardedMessageId = 0 //it.forwardFromMessageId() ?: 0
+        val forwardedDate = if (origin.date() != null) Date.format(origin.date().toLong()) else Date.today
+
+        if (origin is MessageOriginChannel) {
+            forwardedChatId = origin.chat().id()
+            forwardedMessageId = origin.messageId()
+        }
 
         try {
-            update.message().let {
-                feederFacade.registerCV(
-                    RegisterCVRequest(
-                        chatId,
-                        if (it.forwardFromChat() != null && it.forwardFromChat().id() != null) it.forwardFromChat().id() else 0,
-                        it.forwardFromMessageId() ?: 0,
-                        if (it.forwardDate() != null) Date.format(it.forwardDate().toLong()) else Date.today,
-                        it.caption(),
-                        it.document().fileName()
-                    )
-                )
-            }
+            feederFacade.registerCV(RegisterCVRequest(chatId, forwardedChatId, forwardedMessageId, forwardedDate, message.caption(), message.document().fileName()))
         } catch (e: Exception) {
             botService.sendMessage(chatId, "This document has an incorrect fields: ${e.message}")
         }
