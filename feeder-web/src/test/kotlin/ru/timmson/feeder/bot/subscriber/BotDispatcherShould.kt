@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Chat
 import com.pengrad.telegrambot.model.Document
 import com.pengrad.telegrambot.model.Message
 import com.pengrad.telegrambot.model.Update
+import com.pengrad.telegrambot.model.message.origin.MessageOriginChannel
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,6 +39,9 @@ class BotDispatcherShould {
 
     @Spy
     private lateinit var message: Message
+
+    @Spy
+    private lateinit var messageOrigin: MessageOriginChannel
 
     @Spy
     private lateinit var chat: Chat
@@ -106,10 +110,13 @@ class BotDispatcherShould {
 
         feederConfig.ownerId = chatId.toString()
         doReturn(document).`when`(message).document()
-        doReturn(forwardedChat).`when`(message).forwardFromChat()
+
         doReturn(forwardChatId).`when`(forwardedChat).id()
-        `when`(message.forwardFromMessageId()).thenReturn(messageId)
-        `when`(message.forwardDate()).thenReturn(forwardDate)
+        doReturn(forwardedChat).`when`(messageOrigin).chat()
+        doReturn(forwardDate).`when`(messageOrigin).date()
+        doReturn(messageId).`when`(messageOrigin).messageId()
+
+        `when`(message.forwardOrigin()).thenReturn(messageOrigin)
         `when`(message.caption()).thenReturn(caption)
         `when`(document.fileName()).thenReturn(fileName)
         doReturn(chatId).`when`(chat).id()
@@ -121,17 +128,25 @@ class BotDispatcherShould {
     }
 
     @Test
-    fun receiveIncorrectCV() {
-        val expected = "This document has an incorrect fields: caption(...) must not be null"
-        val chatId = 1L
+        fun receiveIncorrectCV() {
+            val expected = "This document has an incorrect fields: caption(...) must not be null"
+            val chatId = 1L
+        val forwardChatId = -1000000000333L
+
+            feederConfig.ownerId = chatId.toString()
 
         feederConfig.ownerId = chatId.toString()
-        doReturn(document).`when`(message).document()
+            doReturn(document).`when`(message).document()
+
+        doReturn(forwardChatId).`when`(forwardedChat).id()
+        doReturn(forwardedChat).`when`(messageOrigin).chat()
+
+            `when`(message.forwardOrigin()).thenReturn(messageOrigin)
         doReturn(chatId).`when`(chat).id()
 
-        botDispatcher.receiveUpdate(update)
+            botDispatcher.receiveUpdate(update)
 
-        verifyNoInteractions(feederFacade)
-        verify(botService).sendMessage(eq(chatId), eq(expected))
+            verifyNoInteractions(feederFacade)
+            verify(botService).sendMessage(eq(chatId), eq(expected))
     }
 }
