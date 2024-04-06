@@ -42,13 +42,13 @@ class BotDispatcher(
         val chatId = message.chat().id()
         val origin = message.forwardOrigin()
 
-        var forwardedChatId = 0L //if (it.forwardFromChat() != null && it.forwardFromChat().id() != null) it.forwardFromChat().id() else 0
-        var forwardedMessageId = 0 //it.forwardFromMessageId() ?: 0
-        val forwardedDate = if (origin.date() != null) Date.format(origin.date().toLong()) else Date.today
+        var forwardedChatId = 0L
+        var forwardedMessageId = 0
+        val forwardedDate = Date.format((origin.date() ?: 0).toLong())
 
         if (origin is MessageOriginChannel) {
-            forwardedChatId = origin.chat().id()
-            forwardedMessageId = origin.messageId()
+            forwardedChatId = origin.chat().id() ?: 0
+            forwardedMessageId = origin.messageId() ?: 0
         }
 
         try {
