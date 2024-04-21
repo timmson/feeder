@@ -23,13 +23,13 @@ class FeederFacade(
     private val log = logger<FeederFacade>()
 
     private val stocks = mapOf(
-        "usd" to "💰 Курс USD: <b>%.2f руб.</b>",
-        "imoex" to "🇷🇺 Индекс Мосбиржи: <b>%.0f</b>",
+        "usd" to "💰 <a href=\"https://www.moex.com/ru/issue/USD000UTSTOM/CETS\">Курс USD</a>: <b>%.2f руб.</b>",
+        "imoex" to "🇷🇺 <a href=\"https://www.moex.com/ru/index/IMOEX\">Индекс Мосбиржи</a>: <b>%.0f</b>",
         "spx" to "🇺🇸 S&P 500 Index: <b>%.0f</b>",
         "shcomp" to "🇨🇳 Shanghai Composite Index: <b>%.0f</b>",
-        "keyRate" to "🗝 Ключевая ставка: <b>%.2f%%</b>",
-        "inflation" to "🎈 Офиц. инфляция: <b>%.2f%%</b>",
-        "mredc" to "🏡 Индекс Мос. Недвиж. ДомКлик: <b>%.0f</b>"
+        "keyRate" to "🗝 <a href=\"https://www.cbr.ru/hd_base/keyrate/\">Ключевая ставка</a>: <b>%.2f%%</b>",
+        "inflation" to "🎈 <a href=\"https://www.cbr.ru/hd_base/infl/\">Офиц. инфляция</a>: <b>%.2f%%</b>",
+        "mredc" to "🏡 <a href=\"https://www.moex.com/ru/index/MREDC\">Стоимость м2 в Москве</a>: <b>%.0f руб.</b>"
     )
 
     fun sendStocksToOwner() =

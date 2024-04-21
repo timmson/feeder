@@ -20,7 +20,10 @@ class BotProxy {
 
     fun execute(sendMessage: ru.timmson.feeder.bot.model.request.SendMessage): SendResponse =
         SendMessage(sendMessage.chatId, sendMessage.text).let {
-            if (sendMessage.isHTML) it.parseMode(ParseMode.HTML)
+            if (sendMessage.isHTML) {
+                it.parseMode(ParseMode.HTML)
+                it.disableWebPagePreview(true)
+            }
             bot.execute(it)
         }
 
