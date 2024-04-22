@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 
 @Service
 data class Version(
-    val number: String = "39",
+    val number: String = "40",
     val feature: String = "Add cache for foreign stocks"
 ) {
 
