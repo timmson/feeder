@@ -33,6 +33,7 @@ class BotDispatcher(
         update.message().text().let {
             when {
                 it.startsWith("/stock") -> feederFacade.sendStocksToOwner()
+                it.startsWith("/put") -> feederFacade.putStock(it)
             }
         }
     }

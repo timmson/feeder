@@ -8,6 +8,7 @@ import ru.timmson.feeder.cv.CVRegistrar
 import ru.timmson.feeder.cv.CVStore
 import ru.timmson.feeder.cv.model.CVRegisterRequest
 import ru.timmson.feeder.cv.model.Fields
+import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.service.IndicatorService
 import java.math.BigDecimal
 
@@ -49,6 +50,17 @@ class FeederFacade(
         send(message)
 
         log.info("Leaving sendStocks(...)")
+    }
+
+    fun putStock(message: String) {
+        log.info("Entering putSock(message=$message) ...")
+
+        val data = message.split(" ")
+        indicatorService.put(Indicator(data[1], BigDecimal(data[2])))
+
+        botService.sendMessageToOwner("ok")
+
+        log.info("Leaving putStock(...)")
     }
 
     fun registerCV(cvRequest: RegisterCVRequest) {

@@ -7,9 +7,9 @@ import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.stock.dao.CentralBankDAO
-import ru.timmson.feeder.stock.dao.CommonStorageDAO
 import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
 import ru.timmson.feeder.stock.dao.StockDAO
+import ru.timmson.feeder.stock.dao.StockStorageDAO
 import ru.timmson.feeder.stock.model.Indicator
 import java.math.BigDecimal
 
@@ -17,7 +17,8 @@ import java.math.BigDecimal
 class IndicatorService(
     private val centralBankDAO: CentralBankDAO,
     moscowExchangeDAO: MoscowExchangeDAO,
-    commonStorageDAO: CommonStorageDAO
+    stockStorageDAO: StockStorageDAO,
+    private val stockFileStorageService: StockFileStorageService
 ) {
 
     private val log = logger<IndicatorService>()
@@ -26,8 +27,8 @@ class IndicatorService(
         "usd" to moscowExchangeDAO,
         "imoex" to moscowExchangeDAO,
         "mredc" to moscowExchangeDAO,
-        "spx" to commonStorageDAO,
-        "shcomp" to commonStorageDAO
+        "spx" to stockStorageDAO,
+        "shcomp" to stockStorageDAO
     )
 
     fun findAll(): List<Indicator> {
@@ -36,6 +37,9 @@ class IndicatorService(
         }
         return stocks + getMainInfo()
     }
+
+    fun put(stock: Indicator) =
+        stockFileStorageService.setStock(stock)
 
     private fun getMainInfo(): List<Indicator> {
         var keyRate = BigDecimal.ZERO
