@@ -9,7 +9,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import ru.timmson.feeder.stock.dao.CentralBankDAO
-import ru.timmson.feeder.stock.dao.MarketWatchDAO
+import ru.timmson.feeder.stock.dao.CommonStorageDAO
 import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
 import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.model.MainInfo
@@ -24,7 +24,7 @@ class IndicatorServiceShould {
     private lateinit var moscowExchangeDAO: MoscowExchangeDAO
 
     @Mock
-    private lateinit var marketWatchDAO: MarketWatchDAO
+    private lateinit var commonStorageDAO: CommonStorageDAO
 
     @Mock
     private lateinit var centralBankDAO: CentralBankDAO
@@ -32,7 +32,7 @@ class IndicatorServiceShould {
 
     @BeforeEach
     fun setUp() {
-        indicatorService = IndicatorService(centralBankDAO, moscowExchangeDAO, marketWatchDAO)
+        indicatorService = IndicatorService(centralBankDAO, moscowExchangeDAO, commonStorageDAO)
     }
 
     @Test
@@ -41,7 +41,7 @@ class IndicatorServiceShould {
 
         `when`(centralBankDAO.getMainInfo()).thenReturn(MainInfo(BigDecimal.ZERO, BigDecimal.ZERO))
         `when`(moscowExchangeDAO.getStockByTicker(any())).thenReturn(indicator)
-        `when`(marketWatchDAO.getStockByTicker(any())).thenReturn(indicator)
+        `when`(commonStorageDAO.getStockByTicker(any())).thenReturn(indicator)
         val actual = indicatorService.findAll()
 
         assertEquals(7, actual.size)
