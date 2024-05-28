@@ -128,25 +128,25 @@ class BotDispatcherShould {
     }
 
     @Test
-        fun receiveIncorrectCV() {
-            val expected = "This document has an incorrect fields: caption(...) must not be null"
-            val chatId = 1L
+    fun receiveIncorrectCV() {
+        val expected = "This document has an incorrect fields: caption(...) must not be null"
+        val chatId = 1L
         val forwardChatId = -1000000000333L
 
-            feederConfig.ownerId = chatId.toString()
+        feederConfig.ownerId = chatId.toString()
 
         feederConfig.ownerId = chatId.toString()
-            doReturn(document).`when`(message).document()
+        doReturn(document).`when`(message).document()
 
         doReturn(forwardChatId).`when`(forwardedChat).id()
         doReturn(forwardedChat).`when`(messageOrigin).chat()
 
-            `when`(message.forwardOrigin()).thenReturn(messageOrigin)
+        `when`(message.forwardOrigin()).thenReturn(messageOrigin)
         doReturn(chatId).`when`(chat).id()
 
-            botDispatcher.receiveUpdate(update)
+        botDispatcher.receiveUpdate(update)
 
-            verifyNoInteractions(feederFacade)
-            verify(botService).sendMessage(eq(chatId), eq(expected))
+        verifyNoInteractions(feederFacade)
+        verify(botService).sendMessage(eq(chatId), eq(expected))
     }
 }
