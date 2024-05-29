@@ -12,6 +12,9 @@ class FeederConfig {
     @Value("\${feeder.tg.owner.id}")
     var ownerId: String = ""
 
+    @Value("\${feeder.tg.users}")
+    var users: List<String> = emptyList()
+
     @Value("\${feeder.stock.schedule}")
     var scheduleStock: String = ""
 
