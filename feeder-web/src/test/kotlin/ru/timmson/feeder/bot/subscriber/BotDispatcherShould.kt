@@ -63,7 +63,7 @@ class BotDispatcherShould {
     @Test
     fun sendSorryWhenMessageIsNotFromOwner() {
         val expected = "Sorry :("
-        feederConfig.ownerId = 1L.toString()
+        feederConfig.users = listOf(1L.toString())
         val senderId = 2L
 
         doReturn(senderId).`when`(chat).id()
@@ -77,7 +77,7 @@ class BotDispatcherShould {
     fun sendSorryWhenMessageIsNotOfAcceptableFormat() {
         val expected = "This message does not contain any of known formats ;("
         val chatId = 1L
-        feederConfig.ownerId = chatId.toString()
+        feederConfig.users = listOf(chatId.toString())
 
         doReturn(chatId).`when`(chat).id()
         botDispatcher.receiveUpdate(update)
@@ -89,7 +89,7 @@ class BotDispatcherShould {
     @Test
     fun askFacadeForSendingStocks() {
         val chatId = 1L
-        feederConfig.ownerId = chatId.toString()
+        feederConfig.users = listOf(chatId.toString())
 
         doReturn("/stock").`when`(message).text()
         doReturn(chatId).`when`(chat).id()
@@ -108,7 +108,7 @@ class BotDispatcherShould {
         val caption = "some text"
         val fileName = "file name"
 
-        feederConfig.ownerId = chatId.toString()
+        feederConfig.users = listOf(chatId.toString())
         doReturn(document).`when`(message).document()
 
         doReturn(forwardChatId).`when`(forwardedChat).id()
@@ -133,9 +133,7 @@ class BotDispatcherShould {
         val chatId = 1L
         val forwardChatId = -1000000000333L
 
-        feederConfig.ownerId = chatId.toString()
-
-        feederConfig.ownerId = chatId.toString()
+        feederConfig.users = listOf(chatId.toString())
         doReturn(document).`when`(message).document()
 
         doReturn(forwardChatId).`when`(forwardedChat).id()

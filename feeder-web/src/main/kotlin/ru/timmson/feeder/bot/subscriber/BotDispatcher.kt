@@ -22,7 +22,7 @@ class BotDispatcher(
         val chatId = update.message().chat().id()
 
         when {
-            feederConfig.ownerId.toLong() != chatId -> botService.sendMessage(chatId, "Sorry :(")
+            !feederConfig.users.contains(chatId.toString()) -> botService.sendMessage(chatId, "Sorry :(")
             update.message().text() != null -> onMessage(update)
             update.message().document() != null -> onDocument(update)
             else -> botService.sendMessage(chatId, "This message does not contain any of known formats ;(")
