@@ -10,9 +10,11 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
-import ru.timmson.feeder.stock.model.MainInfo
+import ru.timmson.feeder.stock.model.curs.CursInfo
+import ru.timmson.feeder.stock.model.main.MainInfo
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
 class CentralBankDAOShould {
@@ -63,5 +65,46 @@ class CentralBankDAOShould {
         `when`(requester.postSOAP(eq("https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"), eq("http://web.cbr.ru/MainInfoXML"), any())).thenReturn("")
 
         assertThrows<StockDAOException> { centralBankDAO.getMainInfo() }
+    }
+
+    @Test
+    fun getCursInfoSuccessfully() {
+        val expected = CursInfo(
+            usd = BigDecimal(89.07).setScale(2, RoundingMode.HALF_UP),
+            eur = BigDecimal(95.15).setScale(2, RoundingMode.HALF_UP)
+        )
+
+        val arrange = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
+                "    <soap:Body>\n" +
+                "        <GetCursOnDateXMLResponse xmlns=\"http://web.cbr.ru/\">\n" +
+                "            <GetCursOnDateXMLResult>\n" +
+                "                <ValuteData OnDate=\"20240615\" xmlns=\"\">\n" +
+                "                    <ValuteCursOnDate>\n" +
+                "                        <Vname>Доллар США</Vname>\n" +
+                "                        <Vnom>1</Vnom>\n" +
+                "                        <Vcurs>89.0658</Vcurs>\n" +
+                "                        <Vcode>840</Vcode>\n" +
+                "                        <VchCode>USD</VchCode>\n" +
+                "                        <VunitRate>89.0658</VunitRate>\n" +
+                "                    </ValuteCursOnDate>\n" +
+                "                    <ValuteCursOnDate>\n" +
+                "                        <Vname>Евро</Vname>\n" +
+                "                        <Vnom>1</Vnom>\n" +
+                "                        <Vcurs>95.1514</Vcurs>\n" +
+                "                        <Vcode>978</Vcode>\n" +
+                "                        <VchCode>EUR</VchCode>\n" +
+                "                        <VunitRate>95.1514</VunitRate>\n" +
+                "                    </ValuteCursOnDate>\n" +
+                "                </ValuteData>\n" +
+                "            </GetCursOnDateXMLResult>\n" +
+                "        </GetCursOnDateXMLResponse>\n" +
+                "    </soap:Body>\n" +
+                "</soap:Envelope>"
+
+        `when`(requester.postSOAP(eq("https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"), eq("http://web.cbr.ru/GetCursOnDateXML"), any())).thenReturn(arrange)
+
+        val actual = centralBankDAO.getCursInfo(LocalDate.of(2024, 6, 17))
+
+        assertEquals(expected, actual)
     }
 }

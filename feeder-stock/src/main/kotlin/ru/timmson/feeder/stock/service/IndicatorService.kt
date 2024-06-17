@@ -12,6 +12,7 @@ import ru.timmson.feeder.stock.dao.StockDAO
 import ru.timmson.feeder.stock.dao.StockStorageDAO
 import ru.timmson.feeder.stock.model.Indicator
 import java.math.BigDecimal
+import java.time.LocalDate
 
 @Service
 class IndicatorService(
@@ -24,7 +25,6 @@ class IndicatorService(
     private val log = logger<IndicatorService>()
 
     private val stocks = mapOf(
-        "usd" to moscowExchangeDAO,
         "imoex" to moscowExchangeDAO,
         "mredc" to moscowExchangeDAO,
         "spx" to stockStorageDAO,
@@ -35,7 +35,7 @@ class IndicatorService(
         val stocks = runBlocking {
             stocks.entries.asFlow().transform { emit(getStock(it)) }.toList()
         }
-        return stocks + getMainInfo()
+        return getCursInfo() + stocks + getMainInfo()
     }
 
     fun put(stock: Indicator) =
@@ -55,6 +55,23 @@ class IndicatorService(
         return listOf(
             Indicator("keyRate", keyRate),
             Indicator("inflation", inflation)
+        )
+    }
+
+    private fun getCursInfo(): List<Indicator> {
+        var usd = BigDecimal.ZERO
+        var eur = BigDecimal.ZERO
+        try {
+            centralBankDAO.getCursInfo(LocalDate.now()).run {
+                usd = this.usd
+                eur = this.eur
+            }
+        } catch (e: Exception) {
+            log.severe("MainInfo is not received: $e")
+        }
+        return listOf(
+            Indicator("usd", usd),
+            Indicator("eur", eur)
         )
     }
 
