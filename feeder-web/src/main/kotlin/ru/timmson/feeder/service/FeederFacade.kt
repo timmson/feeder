@@ -24,7 +24,8 @@ class FeederFacade(
     private val log = logger<FeederFacade>()
 
     private val stocks = mapOf(
-        "usd" to "💰 <a href=\"https://www.moex.com/ru/issue/USD000UTSTOM/CETS\">Курс USD</a>: <b>%.2f руб.</b>",
+        "usd" to "💰 <a href=\"https://www.cbr.ru/currency_base/daily/\">Курс USD</a>: <b>%.2f руб.</b>",
+        "eur" to "💶 <a href=\"https://www.cbr.ru/currency_base/daily/\">Курс EUR</a>: <b>%.2f руб.</b>",
         "imoex" to "🇷🇺 <a href=\"https://www.moex.com/ru/index/IMOEX\">Индекс Мосбиржи</a>: <b>%.0f</b>",
         "spx" to "🇺🇸 <a href=\"https://www.marketwatch.com/investing/index/spx\">S&P 500 Index</a>: <b>%.2f</b>",
         "shcomp" to "🇨🇳 <a href=\"https://www.marketwatch.com/investing/index/shcomp?countrycode=cn\">Shanghai Composite Index</a>: <b>%.2f</b>",

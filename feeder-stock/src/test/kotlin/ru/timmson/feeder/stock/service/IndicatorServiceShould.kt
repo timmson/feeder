@@ -14,7 +14,7 @@ import ru.timmson.feeder.stock.dao.CentralBankDAO
 import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
 import ru.timmson.feeder.stock.dao.StockStorageDAO
 import ru.timmson.feeder.stock.model.Indicator
-import ru.timmson.feeder.stock.model.MainInfo
+import ru.timmson.feeder.stock.model.main.MainInfo
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
@@ -49,7 +49,7 @@ class IndicatorServiceShould {
         `when`(stockStorageDAO.getStockByTicker(any())).thenReturn(indicator)
         val actual = indicatorService.findAll()
 
-        assertEquals(7, actual.size)
+        assertEquals(8, actual.size)
     }
 
     @Test

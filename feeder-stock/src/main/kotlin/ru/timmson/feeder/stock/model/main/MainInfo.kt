@@ -1,4 +1,4 @@
-package ru.timmson.feeder.stock.model
+package ru.timmson.feeder.stock.model.main
 
 import java.math.BigDecimal
 
