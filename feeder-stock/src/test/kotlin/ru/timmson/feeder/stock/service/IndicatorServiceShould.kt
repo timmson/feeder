@@ -10,11 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
-import ru.timmson.feeder.stock.dao.CentralBankDAO
-import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
-import ru.timmson.feeder.stock.dao.StockStorageDAO
+import ru.timmson.feeder.stock.dao.*
 import ru.timmson.feeder.stock.model.Indicator
-import ru.timmson.feeder.stock.model.main.MainInfo
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
@@ -23,7 +20,7 @@ class IndicatorServiceShould {
     private lateinit var indicatorService: IndicatorService
 
     @Mock
-    private lateinit var centralBankDAO: CentralBankDAO
+    private lateinit var currencyRateDAO: CurrencyRateDAO
 
     @Mock
     private lateinit var moscowExchangeDAO: MoscowExchangeDAO
@@ -32,21 +29,26 @@ class IndicatorServiceShould {
     private lateinit var stockStorageDAO: StockStorageDAO
 
     @Mock
-    private lateinit var stockFileStorageService: StockFileStorageService
-
+    private lateinit var mainInfoDAO: MainInfoDAO
 
     @BeforeEach
     fun setUp() {
-        indicatorService = IndicatorService(centralBankDAO, moscowExchangeDAO, stockStorageDAO, stockFileStorageService)
+        indicatorService = IndicatorService(
+            currencyRateDAO = currencyRateDAO,
+            moscowExchangeDAO = moscowExchangeDAO,
+            stockStorageDAO = stockStorageDAO,
+            mainInfoDAO = mainInfoDAO
+        )
     }
 
     @Test
     fun `find all successfully`() {
         val indicator = Indicator("", BigDecimal(2))
 
-        `when`(centralBankDAO.getMainInfo()).thenReturn(MainInfo(BigDecimal.ZERO, BigDecimal.ZERO))
+        `when`(currencyRateDAO.getStockByTicker(any())).thenReturn(indicator)
         `when`(moscowExchangeDAO.getStockByTicker(any())).thenReturn(indicator)
         `when`(stockStorageDAO.getStockByTicker(any())).thenReturn(indicator)
+        `when`(mainInfoDAO.getStockByTicker(any())).thenThrow(StockDAOException(Exception()))
         val actual = indicatorService.findAll()
 
         assertEquals(8, actual.size)
@@ -58,6 +60,6 @@ class IndicatorServiceShould {
 
         indicatorService.put(indicator)
 
-        verify(stockFileStorageService).setStock(eq(indicator))
+        verify(stockStorageDAO).setStock(eq(indicator))
     }
 }

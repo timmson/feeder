@@ -10,30 +10,29 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
-import ru.timmson.feeder.stock.model.curs.CursInfo
-import ru.timmson.feeder.stock.model.main.MainInfo
+import ru.timmson.feeder.stock.model.Indicator
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 
 @ExtendWith(MockitoExtension::class)
-class CentralBankDAOShould {
+class CentralBankAPIShould {
 
-    private lateinit var centralBankDAO: CentralBankDAO
+    private lateinit var centralBankAPI: CentralBankAPI
 
     @Mock
     private lateinit var requester: Requester
 
     @BeforeEach
     fun setUp() {
-        centralBankDAO = CentralBankDAO(requester)
+        centralBankAPI = CentralBankAPI(requester)
     }
 
     @Test
     fun getMainInfoSuccessfully() {
-        val expected = MainInfo(
-            keyRate = BigDecimal(16).setScale(2, RoundingMode.HALF_UP),
-            inflation = BigDecimal(7.69).setScale(2, RoundingMode.HALF_UP)
+        val expected = mapOf(
+            "keyRate" to Indicator("keyRate", BigDecimal(16).setScale(2, RoundingMode.HALF_UP)),
+            "inflation" to Indicator("inflation", BigDecimal(7.69).setScale(2, RoundingMode.HALF_UP))
         )
 
         val arrange =
@@ -54,7 +53,7 @@ class CentralBankDAOShould {
 
         `when`(requester.postSOAP(eq("https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"), eq("http://web.cbr.ru/MainInfoXML"), any())).thenReturn(arrange)
 
-        val actual = centralBankDAO.getMainInfo()
+        val actual = centralBankAPI.getMainInfo()
 
         assertEquals(expected, actual)
     }
@@ -64,14 +63,14 @@ class CentralBankDAOShould {
     fun getMainInfoWithException() {
         `when`(requester.postSOAP(eq("https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"), eq("http://web.cbr.ru/MainInfoXML"), any())).thenReturn("")
 
-        assertThrows<StockDAOException> { centralBankDAO.getMainInfo() }
+        assertThrows<StockDAOException> { centralBankAPI.getMainInfo() }
     }
 
     @Test
     fun getCursInfoSuccessfully() {
-        val expected = CursInfo(
-            usd = BigDecimal(89.07).setScale(2, RoundingMode.HALF_UP),
-            eur = BigDecimal(95.15).setScale(2, RoundingMode.HALF_UP)
+        val expected = mapOf(
+            "usd" to Indicator("usd", BigDecimal(89.07).setScale(2, RoundingMode.HALF_UP)),
+            "eur" to Indicator("eur", BigDecimal(95.15).setScale(2, RoundingMode.HALF_UP))
         )
 
         val arrange = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\">\n" +
@@ -103,7 +102,7 @@ class CentralBankDAOShould {
 
         `when`(requester.postSOAP(eq("https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx"), eq("http://web.cbr.ru/GetCursOnDateXML"), any())).thenReturn(arrange)
 
-        val actual = centralBankDAO.getCursInfo(LocalDate.of(2024, 6, 17))
+        val actual = centralBankAPI.getCursInfo(LocalDate.of(2024, 6, 17))
 
         assertEquals(expected, actual)
     }

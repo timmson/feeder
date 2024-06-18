@@ -4,22 +4,20 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.stock.model.Envelope
-import ru.timmson.feeder.stock.model.curs.CursInfo
-import ru.timmson.feeder.stock.model.curs.ValuteCursOnDate
-import ru.timmson.feeder.stock.model.main.MainInfo
+import ru.timmson.feeder.stock.model.Indicator
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 
 @Service
-open class CentralBankDAO(
+open class CentralBankAPI(
     private val requester: Requester
 ) {
 
     private val xmlMapper = XmlMapper()
 
     @Cacheable(cacheNames = ["mainInfo"])
-    open fun getMainInfo(): MainInfo {
+    open fun getMainInfo(): Map<String, Indicator> {
         try {
             val request = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:web=\"http://web.cbr.ru/\">\n" +
                     "   <soap:Header/>\n" +
@@ -32,10 +30,16 @@ open class CentralBankDAO(
 
             val reqData = extractBody(response)?.mainInfoXMLResponse?.mainInfoXMLResult?.regData
 
-            return MainInfo(
-                keyRate = BigDecimal(reqData?.keyRate ?: 0.0).setScale(2, RoundingMode.HALF_UP),
-                inflation = BigDecimal(reqData?.inflation ?: 0.0).setScale(2, RoundingMode.HALF_UP)
-            )
+            return listOf(
+                Indicator(
+                    name = "keyRate",
+                    price = toBigDecimal(reqData?.keyRate)
+                ),
+                Indicator(
+                    name = "inflation",
+                    price = toBigDecimal(reqData?.inflation)
+                )
+            ).associateBy { it.name }
         } catch (e: Exception) {
             throw StockDAOException(e)
         }
@@ -43,7 +47,7 @@ open class CentralBankDAO(
 
 
     @Cacheable(cacheNames = ["cursInfo"])
-    open fun getCursInfo(date: LocalDate): CursInfo {
+    open fun getCursInfo(date: LocalDate): Map<String, Indicator> {
         val request = "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:web=\"http://web.cbr.ru/\">\n" +
                 "   <soap:Header/>\n" +
                 "   <soap:Body>\n" +
@@ -58,11 +62,20 @@ open class CentralBankDAO(
 
         val valuteCursOnDate = extractBody(response)?.getCursOnDateXMLResponse?.getCursOnDateXMLResult?.valuteData?.valuteCursOnDate?.associateBy { it.chCode?.uppercase() }
 
-        return CursInfo(
-            usd = BigDecimal(valuteCursOnDate?.getOrDefault("USD", ValuteCursOnDate().apply { curs = "0.0" })?.curs).setScale(2, RoundingMode.HALF_UP),
-            eur = BigDecimal(valuteCursOnDate?.getOrDefault("EUR", ValuteCursOnDate().apply { curs = "0.0" })?.curs).setScale(2, RoundingMode.HALF_UP)
-        )
+
+        return listOf(
+            Indicator(
+                name = "usd",
+                price = toBigDecimal(valuteCursOnDate?.get("USD")?.curs)
+            ),
+            Indicator(
+                name = "eur",
+                price = toBigDecimal(valuteCursOnDate?.get("EUR")?.curs)
+            )
+        ).associateBy { it.name }
     }
 
     private fun extractBody(response: String) = xmlMapper.readValue(response, Envelope::class.java).body
+
+    private fun toBigDecimal(keyRate: Double?): BigDecimal = BigDecimal(keyRate ?: 0.0).setScale(2, RoundingMode.HALF_UP)
 }

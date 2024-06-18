@@ -11,7 +11,7 @@ class ValuteCursOnDate() {
     var number: String? = null
 
     @JsonProperty("Vcurs")
-    var curs: String? = null
+    var curs: Double? = null
 
     @JsonProperty("Vcode")
     var code: String? = null
@@ -20,6 +20,6 @@ class ValuteCursOnDate() {
     var chCode: String? = null
 
     @JsonProperty("VunitRate")
-    var unitRate: String? = null
+    var unitRate: Double? = null
 
 }
