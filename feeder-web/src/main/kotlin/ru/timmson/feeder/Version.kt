@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service
 
 @Service
 data class Version(
-    val number: String = "42",
-    val feature: String = "Change currency rates"
+    val number: String = "43",
+    val feature: String = "Refactor fetching"
 ) {
 
     override fun toString(): String {

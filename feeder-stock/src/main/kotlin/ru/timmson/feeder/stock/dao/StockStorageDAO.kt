@@ -12,4 +12,7 @@ open class StockStorageDAO(
     override fun getStockByTicker(ticker: String): Indicator =
         stockFileStorageService.getStockByTicker(ticker)
 
+    fun setStock(indicator: Indicator) =
+        stockFileStorageService.setStock(indicator)
+
 }

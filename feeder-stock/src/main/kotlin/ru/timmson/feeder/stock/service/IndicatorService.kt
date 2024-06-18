@@ -6,82 +6,45 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.common.logger
-import ru.timmson.feeder.stock.dao.CentralBankDAO
-import ru.timmson.feeder.stock.dao.MoscowExchangeDAO
-import ru.timmson.feeder.stock.dao.StockDAO
-import ru.timmson.feeder.stock.dao.StockStorageDAO
+import ru.timmson.feeder.stock.dao.*
 import ru.timmson.feeder.stock.model.Indicator
 import java.math.BigDecimal
-import java.time.LocalDate
 
 @Service
 class IndicatorService(
-    private val centralBankDAO: CentralBankDAO,
+    currencyRateDAO: CurrencyRateDAO,
     moscowExchangeDAO: MoscowExchangeDAO,
-    stockStorageDAO: StockStorageDAO,
-    private val stockFileStorageService: StockFileStorageService
+    private val stockStorageDAO: StockStorageDAO,
+    mainInfoDAO: MainInfoDAO
 ) {
 
     private val log = logger<IndicatorService>()
 
     private val stocks = mapOf(
-        "imoex" to moscowExchangeDAO,
-        "mredc" to moscowExchangeDAO,
-        "spx" to stockStorageDAO,
-        "shcomp" to stockStorageDAO
+        listOf("usd", "eur") to currencyRateDAO,
+        listOf("imoex") to moscowExchangeDAO,
+        listOf("mredc") to moscowExchangeDAO,
+        listOf("spx", "shcomp") to stockStorageDAO,
+        listOf("keyRate", "inflation") to mainInfoDAO,
     )
 
-    fun findAll(): List<Indicator> {
-        val stocks = runBlocking {
-            stocks.entries.asFlow().transform { emit(getStock(it)) }.toList()
-        }
-        return getCursInfo() + stocks + getMainInfo()
+    fun findAll(): List<Indicator> = runBlocking {
+        stocks.entries.asFlow().transform { emit(getStocks(it)) }.toList().flatten()
     }
 
-    fun put(stock: Indicator) =
-        stockFileStorageService.setStock(stock)
+    fun put(stock: Indicator) = stockStorageDAO.setStock(stock)
 
-    private fun getMainInfo(): List<Indicator> {
-        var keyRate = BigDecimal.ZERO
-        var inflation = BigDecimal.ZERO
+    private fun getStocks(stocks: Map.Entry<List<String>, StockDAO>): List<Indicator> =
+        stocks.key.map { getStock(it, stocks.value) }
+
+    private fun getStock(ticker: String, stockDAO: StockDAO): Indicator {
         try {
-            centralBankDAO.getMainInfo().run {
-                keyRate = this.keyRate
-                inflation = this.inflation
-            }
+            return stockDAO.getStockByTicker(ticker)
         } catch (e: Exception) {
-            log.severe("MainInfo is not received: $e")
+            log.severe("Stock $ticker has not been received: $e")
         }
-        return listOf(
-            Indicator("keyRate", keyRate),
-            Indicator("inflation", inflation)
-        )
+        return Indicator(ticker, BigDecimal.ZERO)
     }
 
-    private fun getCursInfo(): List<Indicator> {
-        var usd = BigDecimal.ZERO
-        var eur = BigDecimal.ZERO
-        try {
-            centralBankDAO.getCursInfo(LocalDate.now()).run {
-                usd = this.usd
-                eur = this.eur
-            }
-        } catch (e: Exception) {
-            log.severe("MainInfo is not received: $e")
-        }
-        return listOf(
-            Indicator("usd", usd),
-            Indicator("eur", eur)
-        )
-    }
-
-    private fun getStock(it: Map.Entry<String, StockDAO>): Indicator {
-        try {
-            return it.value.getStockByTicker(it.key)
-        } catch (e: Exception) {
-            log.severe("Stock ${it.key} is not received: $e")
-        }
-        return Indicator(it.key, BigDecimal.ZERO)
-    }
 
 }
