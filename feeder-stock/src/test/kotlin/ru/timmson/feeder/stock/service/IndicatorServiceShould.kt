@@ -31,13 +31,17 @@ class IndicatorServiceShould {
     @Mock
     private lateinit var mainInfoDAO: MainInfoDAO
 
+    @Mock
+    private lateinit var stockFileStorageService: StockFileStorageService
+
     @BeforeEach
     fun setUp() {
         indicatorService = IndicatorService(
             currencyRateDAO = currencyRateDAO,
             moscowExchangeDAO = moscowExchangeDAO,
             stockStorageDAO = stockStorageDAO,
-            mainInfoDAO = mainInfoDAO
+            mainInfoDAO = mainInfoDAO,
+            stockFileStorageService = stockFileStorageService
         )
     }
 
@@ -60,6 +64,6 @@ class IndicatorServiceShould {
 
         indicatorService.put(indicator)
 
-        verify(stockStorageDAO).setStock(eq(indicator))
+        verify(stockFileStorageService).setStock(eq(indicator))
     }
 }

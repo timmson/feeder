@@ -10,7 +10,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service
-open class StockFileStorageService(
+class StockFileStorageService(
     private val fileStorage: FileStorage,
     private val objectMapper: ObjectMapper
 ) {

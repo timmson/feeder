@@ -14,8 +14,9 @@ import java.math.BigDecimal
 class IndicatorService(
     currencyRateDAO: CurrencyRateDAO,
     moscowExchangeDAO: MoscowExchangeDAO,
-    private val stockStorageDAO: StockStorageDAO,
-    mainInfoDAO: MainInfoDAO
+    stockStorageDAO: StockStorageDAO,
+    mainInfoDAO: MainInfoDAO,
+    private val stockFileStorageService: StockFileStorageService
 ) {
 
     private val log = logger<IndicatorService>()
@@ -32,7 +33,7 @@ class IndicatorService(
         stocks.entries.asFlow().transform { emit(getStocks(it)) }.toList().flatten()
     }
 
-    fun put(stock: Indicator) = stockStorageDAO.setStock(stock)
+    fun put(stock: Indicator) = stockFileStorageService.setStock(stock)
 
     private fun getStocks(stocks: Map.Entry<List<String>, StockDAO>): List<Indicator> =
         stocks.key.map { getStock(it, stocks.value) }
