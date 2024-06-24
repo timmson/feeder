@@ -8,14 +8,13 @@ import org.springframework.stereotype.Service
 import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.stock.dao.*
 import ru.timmson.feeder.stock.model.Indicator
-import java.math.BigDecimal
 
 @Service
 class IndicatorService(
     currencyRateDAO: CurrencyRateDAO,
     moscowExchangeDAO: MoscowExchangeDAO,
-    stockStorageDAO: StockStorageDAO,
     mainInfoDAO: MainInfoDAO,
+    private val stockStorageDAO: StockStorageDAO,
     private val stockFileStorageService: StockFileStorageService
 ) {
 
@@ -44,7 +43,7 @@ class IndicatorService(
         } catch (e: Exception) {
             log.severe("Stock $ticker has not been received: $e")
         }
-        return Indicator(ticker, BigDecimal.ZERO)
+        return stockStorageDAO.getStockByTicker(ticker)
     }
 
 
