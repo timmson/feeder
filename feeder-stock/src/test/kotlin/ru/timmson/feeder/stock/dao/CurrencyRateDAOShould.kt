@@ -9,6 +9,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import ru.timmson.feeder.stock.model.Indicator
+import ru.timmson.feeder.stock.service.StockFileStorageService
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
@@ -19,9 +20,15 @@ class CurrencyRateDAOShould {
     @Mock
     private lateinit var centralBankAPI: CentralBankAPI
 
+    @Mock
+    private lateinit var stockFileStorageService: StockFileStorageService
+
     @BeforeEach
     fun setUp() {
-        currencyRateDAO = CurrencyRateDAO(centralBankAPI = centralBankAPI)
+        currencyRateDAO = CurrencyRateDAO(
+            centralBankAPI = centralBankAPI,
+            stockFileStorageService = stockFileStorageService
+        )
     }
 
     @Test

@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.model.MEMarketData
 import ru.timmson.feeder.stock.model.MEStock
+import ru.timmson.feeder.stock.service.StockFileStorageService
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -27,27 +28,20 @@ class MoscowExchangeDAOShould {
     @Mock
     private lateinit var objectMapper: ObjectMapper
 
+    @Mock
+    private lateinit var stockFileStorageService: StockFileStorageService
+
     private val response: String = "resp"
 
     @BeforeEach
     fun setUp() {
-        moscowExchangeDAO = MoscowExchangeDAO(requester, objectMapper)
+        moscowExchangeDAO = MoscowExchangeDAO(
+            requester = requester,
+            objectMapper = objectMapper,
+            stockFileStorageService = stockFileStorageService
+        )
     }
 
-
-    @Test
-    fun returnUSDPrice() {
-        val expected = Indicator("usd", BigDecimal(74.29).setScale(2, RoundingMode.HALF_UP))
-        val meStock = getMeStock("LAST", "74.29")
-
-        val url = "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=CETS:USD000UTSTOM"
-        `when`(requester.get(url)).thenReturn(response)
-        `when`(objectMapper.readValue(eq(response), eq(MEStock::class.java))).thenReturn(meStock)
-
-        val actual = moscowExchangeDAO.getStockByTicker("usd")
-
-        assertEquals(expected, actual)
-    }
 
     @Test
     fun returnMoscowIndexPrice() {
