@@ -8,6 +8,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import ru.timmson.feeder.stock.model.Indicator
+import ru.timmson.feeder.stock.service.StockFileStorageService
 import java.math.BigDecimal
 
 @ExtendWith(MockitoExtension::class)
@@ -18,9 +19,15 @@ class MainInfoDAOShould {
     @Mock
     private lateinit var centralBankAPI: CentralBankAPI
 
+    @Mock
+    private lateinit var stockFileStorageService: StockFileStorageService
+
     @BeforeEach
     fun setUp() {
-        mainInfoDAO = MainInfoDAO(centralBankAPI = centralBankAPI)
+        mainInfoDAO = MainInfoDAO(
+            centralBankAPI = centralBankAPI,
+            stockFileStorageService = stockFileStorageService
+        )
     }
 
     @Test

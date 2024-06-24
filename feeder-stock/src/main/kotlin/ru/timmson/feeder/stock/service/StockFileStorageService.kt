@@ -27,6 +27,7 @@ class StockFileStorageService(
         }
     }
 
+    @Synchronized
     fun setStock(indicator: Indicator) {
         try {
             val data = read().toMutableMap().apply { this[indicator.name] = indicator.price.toString() }

@@ -5,22 +5,20 @@ import org.springframework.stereotype.Service
 import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.model.MEStock
 import ru.timmson.feeder.stock.model.StockConfig
+import ru.timmson.feeder.stock.service.StockFileStorageService
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Service
 open class MoscowExchangeDAO(
     private val requester: Requester,
-    private val objectMapper: ObjectMapper
-) : CachedStockDAO() {
+    private val objectMapper: ObjectMapper,
+    stockFileStorageService: StockFileStorageService,
+) : CachedStockDAO(
+    stockFileStorageService = stockFileStorageService
+) {
 
     private val stockConfigs = mapOf(
-        "usd" to StockConfig(
-            "usd",
-            "https://iss.moex.com/iss/engines/currency/markets/selt/securities.jsonp?securities=CETS:USD000UTSTOM",
-            //"usd" to "https://iss.moex.com/iss/engines/currency/markets/selt/securities/USD000UTSTOM.json",
-            "LAST"
-        ),
         "imoex" to StockConfig(
             "imoex",
             "https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX.json",
@@ -45,7 +43,7 @@ open class MoscowExchangeDAO(
             val price = BigDecimal(meStock.marketdata.data[0][index])
                 .setScale(stockConfig.scale, RoundingMode.HALF_UP)
 
-            return Indicator(ticker.lowercase(), price)
+            return putAndGet(Indicator(ticker.lowercase(), price))
         } catch (e: Exception) {
             throw StockDAOException(e)
         }
