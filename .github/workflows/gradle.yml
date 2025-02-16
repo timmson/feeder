@@ -30,7 +30,7 @@ jobs:
       #  run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
 
       - name: Build image
-        run: docker-compose build
+        run: docker build -t $SERVICE_NAME .
 
       - name: Log into registry
         if: github.ref == 'refs/heads/main'
@@ -40,17 +40,17 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           # Check if it is release branch
-          if [ "${{ github.ref }}" != "refs/heads/main" ]; then 
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
             echo "Skipping push phase"
             exit 0
           fi
-          
+
           SERVICE_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)
           echo SERVICE_NAME=$SERVICE_NAME
 
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$SERVICE_NAME
           echo IMAGE_ID1=$IMAGE_ID
-          
+
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
