@@ -30,7 +30,7 @@ jobs:
       #  run: echo "${{ secrets.CONFIG_FILE }}" > src/config.js
 
       - name: Build image
-        run: docker build -t $SERVICE_NAME .
+        run: docker build -t $(echo '${{ github.repository }}' | cut -d'/' -f2) .
 
       - name: Log into registry
         if: github.ref == 'refs/heads/main'
