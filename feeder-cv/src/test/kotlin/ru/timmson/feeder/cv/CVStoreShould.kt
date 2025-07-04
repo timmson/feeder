@@ -17,22 +17,18 @@ class CVStoreShould {
     private lateinit var cvStore: CVStore
 
     @Mock
-    private lateinit var airtableAPIClient: AirtableAPIClient
-
-    @Mock
     private lateinit var sheetService: SheetService
 
     @BeforeEach
     fun setUp() {
 
-        cvStore = CVStore(airtableAPIClient, sheetService)
+        cvStore = CVStore(sheetService = sheetService)
     }
 
     @Test
     fun add() {
         cvStore.add(Fields("", "", "", "", "", ""))
 
-        verify(airtableAPIClient, times(1)).add(any())
         verify(sheetService, times(1)).add(any())
     }
 }
