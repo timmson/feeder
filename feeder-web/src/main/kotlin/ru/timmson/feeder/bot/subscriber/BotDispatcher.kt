@@ -53,7 +53,17 @@ class BotDispatcher(
         }
 
         try {
-            feederFacade.registerCV(RegisterCVRequest(chatId, forwardedChatId, forwardedMessageId, forwardedDate, message.caption(), message.document().fileName()))
+            feederFacade.registerCV(
+                RegisterCVRequest(
+                    chatId = chatId,
+                    forwardedChatId = forwardedChatId,
+                    forwardedMessageId = forwardedMessageId,
+                    forwardedMessagedDate = forwardedDate,
+                    caption = message.caption(),
+                    fileId = message.document().fileId(),
+                    fileName = message.document().fileName(),
+                )
+            )
         } catch (e: Exception) {
             botService.sendMessage(chatId, "This document has an incorrect fields: ${e.message}")
         }

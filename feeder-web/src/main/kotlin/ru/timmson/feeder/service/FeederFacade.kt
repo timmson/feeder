@@ -14,11 +14,12 @@ import java.math.BigDecimal
 
 @Service
 class FeederFacade(
+    private val cvStore: CVStore,
+    private val botService: BotService,
+    private val cvRegistrar: CVRegistrar,
     private val feederConfig: FeederConfig,
     private val indicatorService: IndicatorService,
-    private val cvRegistrar: CVRegistrar,
-    private val cvStore: CVStore,
-    private val botService: BotService
+    private val cvEstimationService: CVEstimationService,
 ) {
 
     private val log = logger<FeederFacade>()
@@ -87,6 +88,9 @@ class FeederFacade(
             )
 
         cvStore.add(fields)
+
+        /*        val cvFile = botService.downloadFile(cvRequest.fileId)
+                val estimation = cvEstimationService.estimate(cv.type, cvFile)*/
 
         botService.sendMessage(cvRequest.chatId, "<code>$fields</code>")
 

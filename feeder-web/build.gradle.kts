@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":feeder-common"))
     implementation(project(":feeder-cv"))
     implementation(project(":feeder-stock"))
+    implementation(project(":feeder-yandex"))
 
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("com.github.pengrad:java-telegram-bot-api:$tgBotAPIVersion")

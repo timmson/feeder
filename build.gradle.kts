@@ -10,14 +10,9 @@ plugins {
 }
 
 val springVersion: String by project
-val springBootVersion: String by project
-val kotlinVersion: String by project
 val kotlinCoroutinesVersion: String by project
 val jacksonVersion: String by project
-val jsoupVersion: String by project
-val tgBotAPIVersion: String by project
 
-val mockWebserverVersion: String by project
 val junitVersion: String by project
 val mockitoVersion: String by project
 val mockitoKotlinVersion: String by project

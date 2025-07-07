@@ -39,6 +39,9 @@ class BotService(
         sendMessage(feederConfig.ownerId, messageText)
     }
 
+    fun downloadFile(fileId: String): ByteArray =
+        bot.downloadFile(fileId)
+
     @PreDestroy
     fun preDestroy() {
         bot.removeGetUpdatesListener()

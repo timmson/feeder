@@ -6,5 +6,6 @@ data class RegisterCVRequest(
     val forwardedMessageId: Int,
     val forwardedMessagedDate: String,
     var caption: String,
-    val fileName: String
+    val fileName: String,
+    val fileId: String
 )
