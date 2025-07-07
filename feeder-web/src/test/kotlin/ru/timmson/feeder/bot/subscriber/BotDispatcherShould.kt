@@ -106,6 +106,7 @@ class BotDispatcherShould {
         val forwardChatId = -1000000000333L
         val forwardDate = 1000
         val caption = "some text"
+        val fileId = "file id"
         val fileName = "file name"
 
         feederConfig.users = listOf(chatId.toString())
@@ -118,6 +119,7 @@ class BotDispatcherShould {
 
         `when`(message.forwardOrigin()).thenReturn(messageOrigin)
         `when`(message.caption()).thenReturn(caption)
+        `when`(document.fileId()).thenReturn(fileId)
         `when`(document.fileName()).thenReturn(fileName)
         doReturn(chatId).`when`(chat).id()
 

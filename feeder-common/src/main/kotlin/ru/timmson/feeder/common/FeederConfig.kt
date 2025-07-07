@@ -42,5 +42,11 @@ class FeederConfig {
     @Value("\${feeder.cv.spreadSheetSecretFile}")
     var spreadSheetSecretFile: String = ""
 
+    @Value("\${feeder.yandex.token}")
+    var yandexToken: String = ""
+
+    @Value("\${feeder.yandex.model}")
+    var yandexModel: String = ""
+
     val applicationName = "feeder"
 }

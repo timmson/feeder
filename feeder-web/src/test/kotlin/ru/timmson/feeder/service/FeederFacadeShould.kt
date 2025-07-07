@@ -35,9 +35,19 @@ class FeederFacadeShould {
     @Mock
     private lateinit var botService: BotService
 
+    @Mock
+    private lateinit var cvEstimationService: CVEstimationService
+
     @BeforeEach
     fun setUp() {
-        feederFacade = FeederFacade(feederConfig, indicatorService, cvRegistrar, cvStore, botService)
+        feederFacade = FeederFacade(
+            feederConfig = feederConfig,
+            indicatorService = indicatorService,
+            cvRegistrar = cvRegistrar,
+            cvStore = cvStore,
+            botService = botService,
+            cvEstimationService = cvEstimationService
+        )
     }
 
     @Test
