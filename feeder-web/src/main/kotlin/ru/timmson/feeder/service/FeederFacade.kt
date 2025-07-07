@@ -87,12 +87,12 @@ class FeederFacade(
                 url = cv.url
             )
 
-        cvStore.add(fields)
+        //cvStore.add(fields)
+        botService.sendMessage(cvRequest.chatId, "Кандидат:\n<code>$fields</code>")
 
-        /*        val cvFile = botService.downloadFile(cvRequest.fileId)
-                val estimation = cvEstimationService.estimate(cv.type, cvFile)*/
-
-        botService.sendMessage(cvRequest.chatId, "<code>$fields</code>")
+        val cvFile = botService.downloadFile(cvRequest.fileId)
+        val estimation = cvEstimationService.estimate(cv.title.lowercase(), cvFile)
+        botService.sendMessage(cvRequest.chatId, "Оценка кандидата ${cv.name} на позиицию ${cv.title.lowercase()}:\n\n<i>$estimation</i>")
 
         log.info("Leaving registerCV(...) = $cv")
     }
