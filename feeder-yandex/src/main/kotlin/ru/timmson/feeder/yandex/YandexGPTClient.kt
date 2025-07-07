@@ -1,16 +1,17 @@
 package ru.timmson.feeder.yandex
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.common.logger
+import ru.timmson.feeder.yandex.model.YandexCloudTokenRequest
+import ru.timmson.feeder.yandex.model.YandexCloudTokenResponse
 import ru.timmson.feeder.yandex.model.YandexGPTRequest
 import ru.timmson.feeder.yandex.model.YandexGPTResponse
 import java.io.IOException
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.net.http.HttpResponse.BodyHandlers.ofString
 
 
 @Service
@@ -19,19 +20,22 @@ class YandexGPTClient(
 ) {
 
     private val log = logger<YandexGPTClient>()
-    private val client: HttpClient = HttpClient.newHttpClient()
+    private val client: OkHttpClient = OkHttpClient()
 
     @Throws(IOException::class)
-    fun createIAMToken(token: String): String {
-        val request = createJsonRequest("https://iam.api.cloud.yandex.net/iam/v1/tokens", "{\"yandexPassportOauthToken\":\"$token\"}").build()
+    fun createIAMToken(request: YandexCloudTokenRequest): YandexCloudTokenResponse {
+        val body = objectMapper.writeValueAsString(request)
+        val request = createJsonRequest("https://iam.api.cloud.yandex.net/iam/v1/tokens", body).build()
 
-        val response: HttpResponse<String?> = client.send(request, ofString())
+        val response = client.newCall(request).execute()
 
-        log.info { "Response headers: " + response.headers() }
-        //log.info { "Response Status Code: " + response.statusCode() }
-        log.info { "Response Body: " + response.body() }
+        val responseBody = response.body?.string()
+        if (response.code != 200) {
+            log.info { "Request body: $body" }
+            log.info { "Response body: $responseBody" }
+        }
 
-        return ""
+        return objectMapper.readValue(responseBody, YandexCloudTokenResponse::class.java)
     }
 
     @Throws(IOException::class)
@@ -41,23 +45,21 @@ class YandexGPTClient(
         val request = createJsonRequest("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", body)
             .header("Authorization", "Bearer " + yandexGPTRequest.token).build()
 
-        val response: HttpResponse<String?> = client.send(request, ofString())
+        val response = client.newCall(request).execute()
 
-        log.info { "Response Status Code: " + response.statusCode() }
-
-        if (response.statusCode() != 200) {
+        val responseBody = response.body?.string()
+        if (response.code != 200) {
             log.info { "Request body: $body" }
-            log.info { "Response body: " + response.body() }
+            log.info { "Response body: $responseBody" }
         }
 
-        return objectMapper.readValue(response.body(), YandexGPTResponse::class.java)
+        return objectMapper.readValue(responseBody, YandexGPTResponse::class.java)
     }
 
-    private fun createJsonRequest(uri: String, body: String): HttpRequest.Builder =
-        HttpRequest.newBuilder()
-            .uri(URI.create(uri))
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(body))
+    private fun createJsonRequest(uri: String, body: String): Request.Builder =
+        Request.Builder()
+            .url(uri)
+            .post(body.toRequestBody("application/json".toMediaTypeOrNull()))
 
 }
 
