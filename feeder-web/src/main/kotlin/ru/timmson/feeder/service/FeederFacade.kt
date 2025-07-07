@@ -87,7 +87,7 @@ class FeederFacade(
                 url = cv.url
             )
 
-        //cvStore.add(fields)
+        cvStore.add(fields)
         botService.sendMessage(cvRequest.chatId, "Кандидат:\n<code>$fields</code>")
 
         val cvFile = botService.downloadFile(cvRequest.fileId)
