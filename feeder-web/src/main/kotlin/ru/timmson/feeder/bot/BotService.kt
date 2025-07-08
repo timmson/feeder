@@ -30,7 +30,7 @@ class BotService(
         sendMessage(SendMessage(chatId, messageText, true))
 
     fun sendMessage(message: SendMessage) {
-        log.info("Entering sendMessage (${message.chatId}, '${message.text}') ...")
+        log.info("Entering sendMessage (${message.chatId}, '${message.text.take(50)}') ...")
         val response = bot.execute(message)
         log.info("Leaving sendMessage (...) = ${response.isOk}")
     }
