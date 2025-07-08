@@ -58,14 +58,15 @@ class CVRegistrarShould {
             name = "Иванов"
             area = "Омск"
             title = "SDET"
-            type = "Внешний"
+            type = "ИТ1"
         }
         val caption = "SDET (сторонний)\n" +
-                "Омск\n" +
                 "Ключевые навыки:\n" +
                 "• Java  \n" +
                 "• Git  \n" +
                 "• Автоматизированное тестирование\n" +
+                "ИТ1\n" +
+                "Омск\n" +
                 "#sdet"
         val request = CVRegisterRequest(forwardedChatId = 1L, forwardedMessageId = 2, caption = caption, fileName = "Иванов Иван SDET.docx")
 

@@ -23,9 +23,9 @@ class CVRegistrar(
                 val publicChatId = request.forwardedChatId.absoluteValue - 10.0.pow(12.0).toLong()
                 url = listOf(feederConfig.cvChannelUrl, publicChatId, request.forwardedMessageId).joinToString(separator = "/")
                 name = parseFileName(request.fileName)
-                area = if (feederConfig.cvInnerChannelId == publicChatId) feederConfig.cvInnerChannelRegion else it[1]
-                type = if (feederConfig.cvInnerChannelId == publicChatId) "Внутренний" else "Внешний"
-                title = it.last().drop(1).uppercase()
+                type = if (feederConfig.cvInnerChannelId == publicChatId) "Внутренний" else it.dropLast(2).last()
+                area = if (feederConfig.cvInnerChannelId == publicChatId) feederConfig.cvInnerChannelRegion else it.dropLast(1).last()
+                title = it.last().replace("#", "").uppercase()
             }
         }
 
