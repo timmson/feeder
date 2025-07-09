@@ -62,7 +62,7 @@ class CVEstimationService(
     }
 
     private fun getIamToken(): String? {
-        if (token == null || token?.expiresAt?.isAfter(LocalDateTime.now()) ?: false) {
+        if (token == null || token?.expiresAt?.isBefore(LocalDateTime.now()) ?: false) {
             token = yandexGPTClient.createIAMToken(YandexCloudTokenRequest(feederConfig.yandexToken))
         }
         return token?.iamToken
