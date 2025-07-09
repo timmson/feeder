@@ -92,7 +92,7 @@ class FeederFacade(
 
         val cvFile = botService.downloadFile(cvRequest.fileId)
         val estimation = cvEstimationService.estimate(cv.title.lowercase(), cvFile)
-        botService.sendMessage(cvRequest.chatId, "Оценка кандидата ${cv.name} на позиицию ${cv.title.lowercase()}:\n\n<i>$estimation</i>")
+        botService.sendMessage(cvRequest.chatId, "Оценка кандидата ${cv.name} на позицию ${cv.title.lowercase()}:\n\n<i>$estimation</i>")
 
         log.info("Leaving registerCV(...) = $cv")
     }
