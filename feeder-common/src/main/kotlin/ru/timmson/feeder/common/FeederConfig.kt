@@ -36,11 +36,23 @@ class FeederConfig {
     @Value("\${feeder.cv.innerChannelRegion}")
     var cvInnerChannelRegion: String = ""
 
-    @Value("\${feeder.cv.spreadSheetId}")
+    @Value("\${feeder.spreadSheet.enable}")
+    var spreadSheatEnable: String = ""
+
+    val isSpreadSheatEnabled: Boolean
+        get() = spreadSheatEnable == "true"
+
+    @Value("\${feeder.spreadSheet.id}")
     var spreadSheetId: String = ""
 
-    @Value("\${feeder.cv.spreadSheetSecretFile}")
+    @Value("\${feeder.spreadSheet.secretFile}")
     var spreadSheetSecretFile: String = ""
+
+    @Value("\${feeder.yandex.enable}")
+    var yandexEnable: String = ""
+
+    val isYandexEnabled: Boolean
+        get() = yandexEnable == "true"
 
     @Value("\${feeder.yandex.token}")
     var yandexToken: String = ""

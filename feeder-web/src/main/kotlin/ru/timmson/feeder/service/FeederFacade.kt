@@ -77,22 +77,26 @@ class FeederFacade(
             )
         )
 
-        val fields =
-            Fields(
-                name = cv.name,
-                area = cv.area,
-                title = cv.title,
-                type = cv.type,
-                date = cvRequest.forwardedMessagedDate,
-                url = cv.url
-            )
+        if (feederConfig.isSpreadSheatEnabled) {
+            val fields =
+                Fields(
+                    name = cv.name,
+                    area = cv.area,
+                    title = cv.title,
+                    type = cv.type,
+                    date = cvRequest.forwardedMessagedDate,
+                    url = cv.url
+                )
 
-        cvStore.add(fields)
-        botService.sendMessage(cvRequest.chatId, "Кандидат:\n<code>$fields</code>")
+            cvStore.add(fields)
+            botService.sendMessage(cvRequest.chatId, "Кандидат:\n<code>$fields</code>")
+        }
 
-        val cvFile = botService.downloadFile(cvRequest.fileId)
-        val estimation = cvEstimationService.estimate(cv.title.lowercase(), cvFile)
-        botService.sendMessage(cvRequest.chatId, "Оценка кандидата ${cv.name} на позицию ${cv.title.lowercase()}:\n\n<i>$estimation</i>")
+        if (feederConfig.isYandexEnabled) {
+            val cvFile = botService.downloadFile(cvRequest.fileId)
+            val estimation = cvEstimationService.estimate(cv.title.lowercase(), cvFile)
+            botService.sendMessage(cvRequest.chatId, "Оценка кандидата ${cv.name} на позицию ${cv.title.lowercase()}:\n\n<i>$estimation</i>")
+        }
 
         log.info("Leaving registerCV(...) = $cv")
     }
