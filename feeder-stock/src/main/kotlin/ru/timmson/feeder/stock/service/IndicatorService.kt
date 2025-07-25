@@ -24,7 +24,6 @@ class IndicatorService(
         listOf("usd", "eur") to currencyRateDAO,
         listOf("imoex") to moscowExchangeDAO,
         listOf("mredc") to moscowExchangeDAO,
-        listOf("spx", "shcomp") to stockStorageDAO,
         listOf("keyRate", "inflation") to mainInfoDAO,
     )
 
