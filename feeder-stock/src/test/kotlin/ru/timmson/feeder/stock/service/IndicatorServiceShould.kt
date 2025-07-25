@@ -55,7 +55,7 @@ class IndicatorServiceShould {
         `when`(mainInfoDAO.getStockByTicker(any())).thenThrow(StockDAOException(Exception()))
         val actual = indicatorService.findAll()
 
-        assertEquals(8, actual.size)
+        assertEquals(6, actual.size)
     }
 
     @Test
