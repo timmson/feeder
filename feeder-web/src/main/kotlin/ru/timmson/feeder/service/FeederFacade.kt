@@ -11,6 +11,9 @@ import ru.timmson.feeder.cv.model.Fields
 import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.service.IndicatorService
 import java.math.BigDecimal
+import java.text.DecimalFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
 class FeederFacade(
@@ -23,14 +26,16 @@ class FeederFacade(
 ) {
 
     private val log = logger<FeederFacade>()
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+    private val decimalFormatter = DecimalFormat("###,###.##")
 
     private val stocks = mapOf(
-        "usd" to "💵 <a href=\"https://www.cbr.ru/currency_base/daily/\">Курс USD</a>: <b>%.2f руб.</b>",
-        "eur" to "💶 <a href=\"https://www.cbr.ru/currency_base/daily/\">Курс EUR</a>: <b>%.2f руб.</b>",
-        "imoex" to "🇷🇺 <a href=\"https://www.moex.com/ru/index/IMOEX\">Индекс Мосбиржи</a>: <b>%.0f</b>",
-        "keyRate" to "🗝 <a href=\"https://www.cbr.ru/hd_base/keyrate/\">Ключевая ставка</a>: <b>%.2f%%</b>",
-        "inflation" to "🎈 <a href=\"https://www.cbr.ru/hd_base/infl/\">Офиц. инфляция</a>: <b>%.2f%%</b>",
-        "mredc" to "🏡 <a href=\"https://www.moex.com/ru/index/MREDC\">Стоимость м2 в Москве</a>: <b>%.0f руб.</b>"
+        "usd" to "💵 <a href=\"https://www.cbr.ru/currency_base/daily/\">Курс USD</a>: <b>%s руб.</b>",
+        "eur" to "💶 <a href=\"https://www.cbr.ru/currency_base/daily/\">Курс EUR</a>: <b>%s руб.</b>",
+        "imoex" to "🇷🇺 <a href=\"https://www.moex.com/ru/index/IMOEX\">Индекс Мосбиржи</a>: <b>%s</b>",
+        "keyRate" to "🗝 <a href=\"https://www.cbr.ru/hd_base/keyrate/\">Ключевая ставка</a>: <b>%s%%</b>",
+        "inflation" to "🎈 <a href=\"https://www.cbr.ru/hd_base/infl/\">Офиц. инфляция</a>: <b>%s%%</b>",
+        "mredc" to "🏡 <a href=\"https://www.moex.com/ru/index/MREDC\">Стоимость м2 в Москве</a>: <b>%s руб.</b>"
     )
 
     fun sendStocksToOwner() =
@@ -44,10 +49,11 @@ class FeederFacade(
         log.info("Entering sendStocks() ...")
 
         val message = indicatorService.findAll().filter { it.price != BigDecimal.ZERO }.joinToString("\n") {
-            String.format(stocks.getOrDefault(it.name, ""), it.price)
+            String.format(stocks.getOrDefault(it.name, ""), decimalFormatter.format(it.price))
         }
 
-        send(message)
+        val currentDate = LocalDateTime.now().format(dateFormatter)
+        send("<b>$currentDate</b>\n\n$message\n\n${feederConfig.stockChannelId}")
 
         log.info("Leaving sendStocks(...)")
     }
