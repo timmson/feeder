@@ -11,6 +11,7 @@ import ru.timmson.feeder.cv.model.Fields
 import ru.timmson.feeder.stock.model.Indicator
 import ru.timmson.feeder.stock.service.IndicatorService
 import java.math.BigDecimal
+import java.time.LocalDate
 
 @Service
 class FeederFacade(
@@ -47,7 +48,7 @@ class FeederFacade(
             String.format(stocks.getOrDefault(it.name, ""), it.price)
         }
 
-        send(message)
+        send(message + "\n\n\uD83D\uDCC6: ${LocalDate.now()}\n\uD83C\uDF4B${feederConfig.stockChannelId}")
 
         log.info("Leaving sendStocks(...)")
     }
