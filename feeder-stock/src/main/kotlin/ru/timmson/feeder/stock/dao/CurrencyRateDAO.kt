@@ -14,6 +14,6 @@ open class CurrencyRateDAO(
 ) {
 
     override fun getStockByTicker(ticker: String): Indicator =
-        putAndGet(centralBankAPI.getCursInfo(LocalDate.now())[ticker])
+        putAndGet(centralBankAPI.getCursInfo(LocalDate.now().plusDays(1))[ticker])
 
 }
