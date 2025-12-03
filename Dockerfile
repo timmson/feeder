@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 eclipse-temurin:17-jdk-alpine
+FROM --platform=linux/amd64 eclipse-temurin:25-jdk-alpine
 LABEL maintaner="Krotov Artem <timmson666@mail.ru>"
 
 ENV TZ=Europe/Moscow

@@ -10,8 +10,9 @@ dependencies {
     implementation(project(":feeder-stock"))
     implementation(project(":feeder-yandex"))
 
-    implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("com.github.pengrad:java-telegram-bot-api:$tgBotAPIVersion")
+    implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-cache:$springBootVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 }
