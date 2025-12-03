@@ -39,6 +39,7 @@ subprojects {
         testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitVersion")
 
         testImplementation("org.mockito:mockito-core:$mockitoVersion")
         testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
@@ -48,7 +49,7 @@ subprojects {
     tasks.withType<KotlinJvmCompile> {
         compilerOptions {
             freeCompilerArgs.add("-Xjsr305=strict")
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 
