@@ -46,16 +46,14 @@ subprojects {
         testImplementation("org.mockito:mockito-junit-jupiter:$mockitoVersion")
     }
 
+    tasks.withType<JavaCompile>().configureEach {
+        options.release = 21
+    }
+
     tasks.withType<KotlinJvmCompile> {
         compilerOptions {
             freeCompilerArgs.add("-Xjsr305=strict")
             jvmTarget.set(JvmTarget.JVM_21)
-        }
-    }
-
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
 
