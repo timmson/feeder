@@ -12,6 +12,7 @@ dependencies {
 
     implementation("com.github.pengrad:java-telegram-bot-api:$tgBotAPIVersion")
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-cache:$springBootVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
