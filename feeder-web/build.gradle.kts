@@ -6,7 +6,6 @@ dependencies {
     implementation(project(":feeder-calendar"))
     implementation(project(":feeder-common"))
     implementation(project(":feeder-stock"))
-    implementation(project(":feeder-yandex"))
 
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
