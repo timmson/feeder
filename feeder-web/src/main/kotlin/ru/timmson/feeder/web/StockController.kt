@@ -1,6 +1,7 @@
 package ru.timmson.feeder.web
 
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.timmson.feeder.stock.model.Indicator
@@ -14,4 +15,10 @@ class StockController(
 
     @GetMapping("/stocks")
     fun getStocks(): List<Indicator> = indicatorService.findAll()
+
+    @PostMapping("/stocks/refresh")
+    fun refreshStocks(): List<Indicator> {
+        indicatorService.refreshAll()
+        return indicatorService.findAll()
+    }
 }
