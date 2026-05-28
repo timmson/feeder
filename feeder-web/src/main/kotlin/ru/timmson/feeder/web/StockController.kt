@@ -18,7 +18,6 @@ class StockController(
 
     @PostMapping("/stocks/refresh")
     fun refreshStocks(): List<Indicator> {
-        indicatorService.refreshAll()
         return indicatorService.findAll()
     }
 }
