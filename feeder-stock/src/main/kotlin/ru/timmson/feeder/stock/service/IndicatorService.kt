@@ -4,13 +4,14 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Service
 import ru.timmson.feeder.common.logger
 import ru.timmson.feeder.stock.dao.*
 import ru.timmson.feeder.stock.model.Indicator
 
 @Service
-class IndicatorService(
+open class IndicatorService(
     currencyRateDAO: CurrencyRateDAO,
     moscowExchangeDAO: MoscowExchangeDAO,
     mainInfoDAO: MainInfoDAO,
@@ -20,7 +21,7 @@ class IndicatorService(
 
     private val log = logger<IndicatorService>()
 
-    private val stocks = mapOf(
+    private val daos = mapOf(
         listOf("usd", "eur") to currencyRateDAO,
         listOf("imoex") to moscowExchangeDAO,
         listOf("mredc") to moscowExchangeDAO,
@@ -28,13 +29,18 @@ class IndicatorService(
     )
 
     fun findAll(): List<Indicator> = runBlocking {
-        stocks.entries.asFlow().transform { emit(getStocks(it)) }.toList().flatten()
+        daos.entries.asFlow().transform { emit(getStocks(it)) }.toList().flatten()
+    }
+
+    @CacheEvict(cacheNames = ["tickers", "mainInfo", "cursInfo"], allEntries = true)
+    open fun refreshAll() {
+        log.info("Cache cleared, refreshing all stock data")
     }
 
     fun put(stock: Indicator) = stockFileStorageService.setStock(stock)
 
-    private fun getStocks(stocks: Map.Entry<List<String>, StockDAO>): List<Indicator> =
-        stocks.key.map { getStock(it, stocks.value) }
+    private fun getStocks(entry: Map.Entry<List<String>, StockDAO>): List<Indicator> =
+        entry.key.map { getStock(it, entry.value) }
 
     private fun getStock(ticker: String, stockDAO: StockDAO): Indicator {
         try {
